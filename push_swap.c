@@ -6,17 +6,29 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/01/25 11:15:14 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/01/28 15:01:24 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <push_swap.h>
+// #include <push_swap.h>
+#include <stdio.h>
 
 int	main(int argc, char **argv)
 {
-	if (argc == 2)
+	int i = 0;
+	int j = 1;
+	if (argc >= 2)
 	{
-		pass;
+		while (argv[j][i])
+		{
+			while (argv[j][i])
+			{
+				printf("%c\n", argv[j][i]);
+				i++;
+			}
+		i=0;
+		j++;	
+		}
 	}
 	return (0);
 }
