@@ -6,11 +6,11 @@
 #    By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/11 10:46:04 by mrezaei           #+#    #+#              #
-#    Updated: 2022/12/11 17:09:40 by mrezaei          ###   ########.fr        #
+#    Updated: 2023/01/31 20:35:36 by mrezaei          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 			=	libftprintf.a
+NAME 			=	push_swap.a
 CC				=	cc
 FLAGS			=	-Wall -Wextra -Werror
 INCLUDES		=	./include
