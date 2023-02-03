@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/01/28 21:23:16 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/02 15:33:13 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ int	main(int argc, char **argv)
 	i = 0;
 	j = 1;
 	k = 0;
-	argc = 2;
-	**argv = {"12, 34"};
 	if (argc >= 2)
 	{
 		while (argv[j][i])
 		{
 			while (argv[j][i])
 			{
-				str[k] = argv[j][i];
+				// str[k] = argv[j][i];
+				printf("%c\n", argv[j][i]);
 				i++;
 				k++;
 			}
