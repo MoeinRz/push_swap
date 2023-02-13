@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/12 21:43:23 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/13 12:09:54 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,9 @@ typedef	struct {
 	int	size;
 } stack;
 
-void	test(stack *a)
-{
-	int	i;
-
-	i = 0;
-	while (i < a->size)
-	{
-		printf("%d ", a->stack[i]);
-		i++;
-	}
-	printf("\n");
-}
-
 void	init_stack(stack *s, int size)
 {
-	s->stack = (int *)malloc(size * sizeof(int));
+	s->stack = (int *)calloc(size * sizeof(int), 0);
 	s->top = -1;
 	s->size = size;
 }
@@ -67,44 +54,40 @@ int	pop(stack *s)
 		write(1, "Error\n", 6);
 		exit(1);
 	}
-	return (s->stack[s->size - 1 - (s->top--)]);
+	return (s->stack[s->top--]);
+//	return (s->stack[s->size - 1 - (s->top--)]);
 }
-// int	pop(stack *s)
-// {
-// 	if (is_empty(s))
-// 	{
-// 		write(1, "Error\n", 6);
-// 		exit(1);
-// 	}
-// 	return (s->stack[s->top--]);
-// }
 
 void	push(stack *s, int item)
 {
+	int	i;
+
 	if (is_full(s))
 	{
 		write(1, "Error\n", 6);
 		exit(1);
 	}
-	// Move all the elements of the stack one position up
-	for (int i = s->top; i >= 0; i--)
+	i = s->top;
+	while (i >= 0)
 	{
 		s->stack[i + 1] = s->stack[i];
+		i--;
 	}
-	// Add the new element to the bottom of the stack
 	s->stack[0] = item;
-	// Update the top of the stack
 	s->top++;
 }
 
-// {
-// 	if (is_full(s))
-// 	{
-// 		write(1, "Error\n", 6);
-// 		exit(1);
-// 	}
-// 	s->stack[++s->top] = item;
-// }
+void	push_end(stack *s, int item)
+{
+    if (is_full(s))
+    {
+        write(1, "Error\n", 6);
+        exit(1);
+    }
+    // Add the new element to the end of the stack
+    s->stack[++(s->top)] = item;
+}
+
 void	ptest(stack *s)
 {
 	if (s == NULL)
@@ -156,79 +139,59 @@ void	ss(stack *a, stack *b)
 	printf("ss\n");
 }
 
-void pa(stack *a, stack *b) {
-	if (b->top == -1) {
-		return;
-	}
-	int temp = pop(b);  // remove the top element from b and store it in temp
-	push(a, temp);      // add temp to the top of a
-	printf("pa\n");
+void	pa(stack *a, stack *b)
+{
+    if (b->top == -1)
+        return;
+    int temp = b->stack[b->top];  // remove the top element from b and store it in temp
+    b->top--;
+    push_end(a, temp);      // add temp to the top of a
+    printf("pa\n");
 }
-// void pa(stack *a, stack *b) {
-//     if (b->top == -1) {
-//         return;
-//     }
-//     int i = b->size - 1;
-//     int temp = b->stack[i];
-//     while (i > 0) {
-//         b->stack[i] = b->stack[i - 1];
-//         i--;
-//     }
-//     b->top--;
-//     push(a, temp);
-//     printf("pa\n");
-// }
-// void	pa(stack *a, stack *b)
-// {
-// 	if (b->top == -1)
-// 		return ;
-// 	push(a, pop(b));
-// 	printf("pa");
-// }
 
 void	pb(stack *a, stack *b)
 {
-	if (a->top == -1)
-		return ;
-	int temp = pop(a);  // remove the top element from b and store it in temp
-	push(b, temp);      // add temp to the top of a
-	printf("pb\n");
+    if (a->top == -1)
+        return;
+    int temp = pop(a);  // remove the top element from a and store it in temp
+    push_end(b, temp);  // add temp to the bottom of b
+    printf("pb\n");
 }
 
 void	ra(stack *a)
 {
-	int	temp;
-	int	i;
+    int	temp;
+    int	i;
 
-	if (a->top == -1)
-		return ;
-	temp = a->stack[0];
-	i = 0;
-	while (i < a->top)
-	{
-		a->stack[i] = a->stack[i + 1];
-		i++;
-	}
-	a->stack[a->top] = temp;
-	printf("ra");
+    if (a->top == -1)
+        return;
+    temp = a->stack[a->top];
+    i = a->top;
+    while (i > 0)
+    {
+        a->stack[i] = a->stack[i - 1];
+        i--;
+    }
+    a->stack[0] = temp;
+    printf("ra\n");
 }
 
 void	rb(stack *b)
 {
-	int	temp;
-	int	i;
+    int	temp;
+    int	i;
 
-	if (b->top == -1)
-		return ;
-	temp = b->stack[0];
-	i = 0;
-	while (i < b->top)
-	{
-		b->stack[i] = b->stack[i + 1];
-		i++;
-	}
-	b->stack[b->top] = temp;
-	printf("rb");
+    if (b->top == -1)
+        return;
+    temp = b->stack[b->top];
+    i = b->top;
+    while (i > 0)
+    {
+        b->stack[i] = b->stack[i - 1];
+        i--;
+    }
+    b->stack[0] = temp;
+    printf("rb\n");
 }
 
 void	rr(stack *a, stack *b)
@@ -455,15 +418,10 @@ int	main(int argc, char *argv[])
 		write(1, "Error\n", 6);
 		return (0);
 	}
-	printf("a1=");
-	ptest(&a);
-	printf("b1=");
-	ptest(&b);
-	pb(&a, &b);
-	printf("a2=");
-	ptest(&a);
-	printf("b2=");
-	ptest(&b);
+	init_stack(&b, argc - 1);
+	
+	sort_stack(&a, &b);
+
 
 	free_stack(&a);
 	free_stack(&b);
