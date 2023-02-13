@@ -6,7 +6,7 @@
 /*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/13 12:09:54 by moein            ###   ########.fr       */
+/*   Updated: 2023/02/13 13:02:28 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,47 +295,43 @@ int	is_repeated(stack *a, stack *b)
 	return (0);
 }
 
-void	sort_3(stack *stack_a)
+void	ft_mid_sort(stack *stack_a)
 {
-	int	values[3];
+	int	v[3];
 	int	temp;
 	int	i;
 	int	j;
-	ptest(stack_a);
-		sa(stack_a);
-			ptest(stack_a);
-		rra(stack_a);
-			ptest(stack_a);
-		return ;
-	values[0] = pop(stack_a);
-	values[1] = pop(stack_a);
-	values[2] = pop(stack_a);
-	if (values[0] < values[1] < values[2])
-	{
-		sa(stack_a);
-		rra(stack_a);
-		return ;
-	}
-	i = 0;
-	while (i < 2)
-	{
-		j = i + 1;
-		while (j < 3)
-		{
-			if (values[i] < values[j])
-			{
-				temp = values[i];
-				values[i] = values[j];
-				values[j] = temp;
-			}
-			j++;
-		}
-		i++;
-	}
 
-	push(stack_a, values[2]);
-	push(stack_a, values[1]);
-	push(stack_a, values[0]);
+	v[0] = stack_a->stack[0];
+	v[1] = stack_a->stack[1];
+	v[2] = stack_a->stack[2];
+	if ((v[2] > v[1]) && (v[2] > v[0]) && (v[1] > v[0]))
+	{
+		sa(stack_a);
+		rra(stack_a);
+		return ;
+	}
+	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
+	{
+		rra(stack_a);
+		sa(stack_a);
+		return ;
+	}
+	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
+	{
+		rra(stack_a);
+		return ;
+	}
+	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
+	{
+		ra(stack_a);
+		return ;
+	}
+	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
+	{
+		sa(stack_a);
+		return ;
+	}
 }
 
 void	sort_stack(stack *a, stack *b)
@@ -356,9 +352,7 @@ void	sort_stack(stack *a, stack *b)
 	}
 	else if (size == 3)
 	{
-		sort_3(a);
-		// printf("Sorted stack: ");
-//		ptest(a);
+		ft_mid_sort(a);
 		return ;
 	}
 	else
@@ -421,8 +415,7 @@ int	main(int argc, char *argv[])
 	init_stack(&b, argc - 1);
 	
 	sort_stack(&a, &b);
-
-
+	ptest(&a);
 	free_stack(&a);
 	free_stack(&b);
 	return (0);
