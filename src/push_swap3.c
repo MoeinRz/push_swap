@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/14 15:55:30 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/14 18:42:23 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,23 +288,6 @@ int is_repeated(stack *s) {
     return 0; // no duplicates found
 }
 
-int	is_repeated2(stack *a, stack *b)
-{
-	int	i;
-
-	i = 0;
-	while (i <= a->top)
-	{
-		while (!is_empty(b) && b->stack[b->top] > a->stack[i])
-			pop(b);
-		if (!is_empty(b) && b->stack[b->top] == a->stack[i])
-			return (1);
-		push(b, a->stack[i]);
-		i++;
-	}
-	return (1);
-}
-
 void	ft_mid_sort(stack *stack_a)
 {
 	int	v[3];
@@ -343,33 +326,32 @@ void	ft_mid_sort(stack *stack_a)
 		return ;
 	}
 }
-int find_median(stack *a) {
-	int size = a->top + 1;
-	int b[size];
 
-	for (int i = 0; i < size; i++) {
-		b[i] = pop(a);
-	}
-	for (int i = 0; i < size; i++) {
-		for (int j = i + 1; j < size; j++) {
-			if (b[j] > b[i]) {  // Change comparison operator to >
-				int temp = b[i];
-				b[i] = b[j];
-				b[j] = temp;
+void	quicksort(stack *a, stack *b)
+{
+	int	size;
+	int	temp;
+	int	i;
+	int	j;
+size = a->top + 1;
+i = 0;
+	while (i < size)
+	{
+		j = i + 1;
+		while (j < size)
+		{
+			if (a->stack[j] > a->stack[i])
+			{
+				temp = a->stack[i];
+				a->stack[i] = a->stack[j];
+				a->stack[j] = temp;
+				printf("Swapped %d and %d\n", a->stack[i], a->stack[j]);
 			}
+			j++;
 		}
+		i++;
 	}
-	int median;
-	if (size % 2 == 0) {
-		median = (b[size/2 - 1] + b[size/2]) / 2;
-	} else {
-		median = b[size/2];
-	}
-	for (int i = size - 1; i >= 0; i--) {
-		push(a, b[i]);
-	}
-
-	return median;
+	return ;
 }
 
 void	sort_stack(stack *a, stack *b)
@@ -394,43 +376,9 @@ void	sort_stack(stack *a, stack *b)
 	}
 	else
 	{
-	median = find_median(a);
-		while (a->top >= 0 && !check_sorted(a))
-		{
-			if (a->stack[a->top] <= median)
-				pb(a, b);
-			else
-				ra(a);
-		}
-		while (b->top >= 0)
-			pa(a, b);
+		quicksort(a, b);
 		return ;
-
-	while (i < size)
-	{
-		j = i + 1;
-		while (j < size)
-		{
-			if (a->stack[j] < a->stack[i])
-			{
-				temp = a->stack[i];
-				a->stack[i] = a->stack[j];
-				a->stack[j] = temp;
-				printf("Swapped %d and %d\n", a->stack[i], a->stack[j]);
-			}
-			j++;
-		}
-		i++;
 	}
-	printf("Sorted stack: ");
-	i = 0;
-	while (i < size)
-	{
-		printf("%d ", a->stack[i]);
-		i++;
-	}
-	}
-	write(1, "\n", 1);
 }
 
 int	main(int argc, char *argv[])
@@ -464,10 +412,11 @@ int	main(int argc, char *argv[])
 		return (0);
 	}
 	ptest(&a);
+	ptest(&b);
 	sort_stack(&a, &b);
 	ptest(&a);
-	
+	ptest(&b);	
 	free_stack(&a);
 	free_stack(&b);
-	return (0);
+	return (0); 
 }
