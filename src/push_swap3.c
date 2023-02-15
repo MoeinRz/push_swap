@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/14 18:42:23 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/15 01:07:23 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,8 +326,119 @@ void	ft_mid_sort(stack *stack_a)
 		return ;
 	}
 }
+///////////////////////////////////////////////////////////
+int		stack_length(stack *s)
+{
+	int	len;
+
+	len = s->top + 1;
+	return (len);
+}
+
+int		get_pivot(int *arr, int start, int end)
+{
+	int	pivot;
+	int	mid;
+
+	mid = (start + end) / 2;
+	if (arr[start] >= arr[end] && arr[start] <= arr[mid])
+		pivot = start;
+	else if (arr[start] >= arr[mid] && arr[start] <= arr[end])
+		pivot = start;
+	else if (arr[end] >= arr[start] && arr[end] <= arr[mid])
+		pivot = end;
+	else if (arr[end] >= arr[mid] && arr[end] <= arr[start])
+		pivot = end;
+	else
+		pivot = mid;
+	return (pivot);
+}
+
+void	partition(stack *a, stack *b, int start, int end)
+{
+	if (start >= end)
+		return ;
+	int	pivot_index;
+	int	pivot_value;
+
+	pivot_index = get_pivot(a->stack, start, end);
+	pivot_value = a->stack[pivot_index];
+	push(b, pivot_value);
+	while (a->top >= 0)
+	{
+		if (a->stack[a->top] < pivot_value)
+			pb(a, b);
+		else if (a->top == pivot_index)
+		{
+			ra(a);
+			if (b->top >= 0 && b->stack[b->top] == pivot_value)
+				pa(a, b);
+		}
+		else
+			rra(a);
+	}
+	while (b->top >= 0)
+		pa(a, b);
+	partition(a, b, start, pivot_index - 1);
+	partition(a, b, pivot_index + 1, end);
+}
+
+void	partition0(stack *a, stack *b, int start, int end)
+{
+	if (start >= end)
+		return ;
+	int	pivot_index;
+	int	pivot_value;
+	int i = 0;
+
+	pivot_index = get_pivot(a->stack, start, end);
+	pivot_value = a->stack[pivot_index];
+	push(b, pivot_value);
+	printf("marhale1\n");
+	ptest(a);
+	ptest(b);
+	while (i <= end)
+	{
+		if (a->stack[a->top] < pivot_value)
+			pb(a, b);
+		else if (a->stack[a->top] == pivot_value)
+			pop(a);
+		else if (a->top == pivot_index)
+			ra(a);
+		else
+			ra(a);
+		i++;
+	}
+	printf("marhale2\n");
+	ptest(a);
+	ptest(b);
+	while (b->top >= 0){
+		pa(a, b);
+			ptest(a);
+	ptest(b);}
+	printf("marhale3\n");
+	ptest(a);
+	ptest(b);
+	partition(a, b, start, pivot_index - 1);
+	partition(a, b, pivot_index + 1, end);
+}
 
 void	quicksort(stack *a, stack *b)
+{
+	int	start;
+	int	end;
+
+	start = 0;
+	end = stack_length(a) - 1;
+	partition(a, b, start, a->size - 1);
+	return ;
+}
+
+
+/// @brief ////////////////////////////////////////////////
+/// @param a 
+/// @param b /
+void	quicksort0(stack *a, stack *b)
 {
 	int	size;
 	int	temp;
@@ -345,7 +456,8 @@ i = 0;
 				temp = a->stack[i];
 				a->stack[i] = a->stack[j];
 				a->stack[j] = temp;
-				printf("Swapped %d and %d\n", a->stack[i], a->stack[j]);
+				// printf("Swapped %d and %d\n", a->stack[i], a->stack[j]);
+				ptest(a);
 			}
 			j++;
 		}
