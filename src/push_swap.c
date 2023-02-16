@@ -6,7 +6,7 @@
 /*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/16 23:40:35 by moein            ###   ########.fr       */
+/*   Updated: 2023/02/16 23:49:14 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,9 +295,9 @@ int	is_repeated(t_stack *s)
 	int	j;
 
 	i = 0;
-	j = i + 1;
 	while (i <= s->top)
 	{
+		j = i + 1;
 		while (j <= s->top)
 		{
 			if (s->t_stack[i] == s->t_stack[j])
