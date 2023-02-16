@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/15 19:01:52 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/16 17:59:01 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef	struct {
 
 void	init_stack(stack *s, int size)
 {
-	s->stack = (int *)calloc(size * sizeof(int), 0);
+	s->stack = (int *)malloc(size * sizeof(int));
 	s->top = -1;
 	s->size = size;
 }
@@ -54,12 +54,12 @@ void	ptest(stack *s)
 {
 	int	i;
 
-	i = s->top;
 	if (s == NULL)
 	{
 		printf("Error: Stack is null\n");
 		return ;
 	}
+	i = s->top;
 	if (is_empty(s) == -1)
 	{
 		printf("Stack is empty\n");
@@ -72,6 +72,7 @@ void	ptest(stack *s)
 		i--;
 	}
 	printf("\n");
+	// printf("The top is : %d\n", s->top);
 }
 
 int	pop(stack *s)
@@ -85,6 +86,8 @@ int	pop(stack *s)
 		exit(1);
 	}
 	tmp = s->stack[s->top];
+	// printf("The address of the top is : %p\n", &s->stack[s->top]);
+	// printf("The address of the top is : %p\n", &tmp);
 	s->top--;
 	return (tmp);
 }
@@ -155,10 +158,8 @@ void	ss(stack *a, stack *b)
 void	pa(stack *a, stack *b)
 {
 	if (b->top == -1)
-		return;
-	int temp = b->stack[b->top];
-	b->top--;
-	push_end(a, temp);
+		return ;
+	push_end(a, pop(b));
 	printf("pa\n");
 }
 
@@ -169,9 +170,7 @@ void	pb(stack *a, stack *b)
 	temp = 0;
 	if (a->top == -1)
 		return;
-	temp = a->stack[a->top];
-	a->top--;
-	push_end(b, temp);
+	push_end(b, pop(a));
 	printf("pb\n");
 }
 
@@ -369,42 +368,44 @@ void	partition0(stack *a, stack *b, int start, int end)
 		return ;
 	int	pivot_index;
 	int	pivot_value;
-	int i;
+	int	i;
+	int	temp;
 
+	temp = 0;
 	pivot_index = get_pivot(a->stack, start, end);
 	pivot_value = a->stack[pivot_index];
-//	push(b, pivot_value);
-	printf("marhale1, PI=%d, PV=%d\n", pivot_index, pivot_value);
-	ptest(a);
-	ptest(b);
+	// printf("marhale1---------------------->, PI=%d, PV=%d\n", pivot_index, pivot_value);
+	// ptest(a);
+	// ptest(b);
 	i = a->size;
 	while (i)
 	{
-		printf("----------------------------->  %d\n", i);
-	ptest(a);
-	ptest(b);
-	printf("stack[a->top]===>  %d\n", a->stack[a->top]);
+	// printf("***** i= %d\n", i);
+	// ptest(a);
+	// ptest(b);
+
 		if (a->stack[a->top] < pivot_value)
 			pb(a, b);
-		//else if (a->stack[a->top] == pivot_value)
-		//	pop(a);
-		else if (a->top == pivot_index)
-			ra(a);
-		else
+		else if (a->stack[a->top] == pivot_value)
+			pop(a);
+		// else if (a->top == pivot_index)
+		// 	rra(a);
+		else if (a->stack[a->top] > pivot_value)
 			ra(a);
 		i--;
 		
 	}
-	printf("marhale2  \n");
-	ptest(a);
-	ptest(b);
+	push_end(a, pivot_value);
+	// printf("marhale----------------------------->2  \n");
+	// ptest(a);
+	// ptest(b);
 	while (b->top >= 0)
 	{
 		pa(a, b);
 	}
-	printf("* * * * * * * * * marhale3  \n");
-	ptest(a);
-	ptest(b);
+	// printf("marhale----------------------------->3  \n");
+	// ptest(a);
+	// ptest(b);
 	partition0(a, b, start, pivot_index - 1);
 	partition0(a, b, pivot_index + 1, end);
 }
@@ -491,6 +492,10 @@ int	main(int argc, char *argv[])
 	int		i;
 	int		num;
 
+	// char *my_argv[] = {"program_name", "-1", "2", "8", "5", "80", "-25"};
+	// argc = sizeof(my_argv) / sizeof(char *);
+	// argv = my_argv;
+	
 	if (argc == 1)
 		return (0);
 	init_stack(&a, argc - 1);
@@ -514,15 +519,17 @@ int	main(int argc, char *argv[])
 		write(1, "Error\n", 6);
 		return (0);
 	}
-	for (int k=0; k < 4; k++)
-	{
-	printf("a= -%d- ", a.top );
+
+	printf("a=");
 	ptest(&a);
-	printf("b= -%d- ", b.top );
-	ptest(&b);
-	pb(&a, &b);
-	}
-	//sort_stack(&a, &b);
+
+
+	sort_stack(&a, &b);
+
+	printf("a=");
+	ptest(&a);
+
+
 
 	free_stack(&a);
 	free_stack(&b);
