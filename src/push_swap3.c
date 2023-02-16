@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:03:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/16 17:59:01 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/16 19:16:26 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,28 @@
 #include <ctype.h>
 #include <unistd.h>
 
-typedef	struct {
-	int	*stack;
+typedef struct s_stack{
+	int	*t_stack;
 	int	top;
 	int	size;
-} stack;
+}	t_stack;
 
-void	init_stack(stack *s, int size)
+void	init_stack(t_stack *s, int size)
 {
-	s->stack = (int *)malloc(size * sizeof(int));
+	s->t_stack = (int *)malloc(size * sizeof(int));
 	s->top = -1;
 	s->size = size;
 }
 
-void	free_stack(stack *s)
+void	free_stack(t_stack *s)
 {
-	free(s->stack);
-	s->stack = NULL;
+	free(s->t_stack);
+	s->t_stack = NULL;
 	s->top = -1;
 	s->size = 0;
 }
 
-int	is_empty(stack *s)
+int	is_empty(t_stack *s)
 {
 	if (s->top == -1)
 		return (-1);
@@ -45,37 +45,35 @@ int	is_empty(stack *s)
 		return (s->top);
 }
 
-int	is_full(stack *s)
+int	is_full(t_stack *s)
 {
 	return (s->top == s->size - 1);
 }
 
-void	ptest(stack *s)
+void	ptest(t_stack *s)
 {
 	int	i;
 
 	if (s == NULL)
 	{
-		printf("Error: Stack is null\n");
+		printf("Error: t_stack is null\n");
 		return ;
 	}
 	i = s->top;
 	if (is_empty(s) == -1)
 	{
-		printf("Stack is empty\n");
+		printf("t_stack is empty\n");
 		return ;
 	}
-	// printf("Stack elements from top to bottom: ");
 	while (i >= 0)
 	{
-		printf("%d ", s->stack[i]);
+		printf("%d ", s->t_stack[i]);
 		i--;
 	}
 	printf("\n");
-	// printf("The top is : %d\n", s->top);
 }
 
-int	pop(stack *s)
+int	pop(t_stack *s)
 {
 	int	tmp;
 
@@ -85,14 +83,12 @@ int	pop(stack *s)
 		write(1, "Error\n", 6);
 		exit(1);
 	}
-	tmp = s->stack[s->top];
-	// printf("The address of the top is : %p\n", &s->stack[s->top]);
-	// printf("The address of the top is : %p\n", &tmp);
+	tmp = s->t_stack[s->top];
 	s->top--;
 	return (tmp);
 }
 
-void	push(stack *s, int item)
+void	push(t_stack *s, int item)
 {
 	int	i;
 
@@ -104,58 +100,56 @@ void	push(stack *s, int item)
 	i = s->top;
 	while (i >= 0)
 	{
-		s->stack[i + 1] = s->stack[i];
+		s->t_stack[i + 1] = s->t_stack[i];
 		i--;
 	}
-	s->stack[0] = item;
+	s->t_stack[0] = item;
 	s->top++;
 }
 
-void	push_end(stack *s, int item)
+void	push_end(t_stack *s, int item)
 {
 	if (is_full(s))
 	{
 		write(1, "Error\n", 6);
 		exit(1);
 	}
-	// Add the new element to the end of the stack
 	s->top++;
-	s->stack[s->top] = item;
-//	s->stack[++(s->top)] = item;
+	s->t_stack[s->top] = item;
 }
 
-void	sa(stack *a)
+void	sa(t_stack *a)
 {
 	int	temp;
 
 	if (a->top < 1)
 		return ;
-	temp = a->stack[a->top];
-	a->stack[a->top] = a->stack[a->top - 1];
-	a->stack[a->top - 1] = temp;
+	temp = a->t_stack[a->top];
+	a->t_stack[a->top] = a->t_stack[a->top - 1];
+	a->t_stack[a->top - 1] = temp;
 	printf("sa\n");
 }
 
-void	sb(stack *b)
+void	sb(t_stack *b)
 {
 	int	temp;
 
 	if (b->top < 1)
 		return ;
-	temp = b->stack[b->top];
-	b->stack[b->top] = b->stack[b->top - 1];
-	b->stack[b->top - 1] = temp;
+	temp = b->t_stack[b->top];
+	b->t_stack[b->top] = b->t_stack[b->top - 1];
+	b->t_stack[b->top - 1] = temp;
 	printf("sb\n");
 }
 
-void	ss(stack *a, stack *b)
+void	ss(t_stack *a, t_stack *b)
 {
 	sa(a);
 	sb(b);
 	printf("ss\n");
 }
 
-void	pa(stack *a, stack *b)
+void	pa(t_stack *a, t_stack *b)
 {
 	if (b->top == -1)
 		return ;
@@ -163,104 +157,104 @@ void	pa(stack *a, stack *b)
 	printf("pa\n");
 }
 
-void	pb(stack *a, stack *b)
+void	pb(t_stack *a, t_stack *b)
 {
-	int	 temp;
+	int	temp;
 
 	temp = 0;
 	if (a->top == -1)
-		return;
+		return ;
 	push_end(b, pop(a));
 	printf("pb\n");
 }
 
-void	ra(stack *a)
+void	ra(t_stack *a)
 {
 	int	temp;
 	int	i;
 
 	if (a->top == -1)
-		return;
-	temp = a->stack[a->top];
+		return ;
+	temp = a->t_stack[a->top];
 	i = a->top;
 	while (i > 0)
 	{
-		a->stack[i] = a->stack[i - 1];
+		a->t_stack[i] = a->t_stack[i - 1];
 		i--;
 	}
-	a->stack[0] = temp;
+	a->t_stack[0] = temp;
 	printf("ra\n");
 }
 
-void	rb(stack *b)
+void	rb(t_stack *b)
 {
 	int	temp;
 	int	i;
 
 	if (b->top == -1)
-		return;
-	temp = b->stack[b->top];
+		return ;
+	temp = b->t_stack[b->top];
 	i = b->top;
 	while (i > 0)
 	{
-		b->stack[i] = b->stack[i - 1];
+		b->t_stack[i] = b->t_stack[i - 1];
 		i--;
 	}
-	b->stack[0] = temp;
+	b->t_stack[0] = temp;
 	printf("rb\n");
 }
 
-void	rr(stack *a, stack *b)
+void	rr(t_stack *a, t_stack *b)
 {
 	ra(a);
 	rb(b);
 	printf("rr\n");
 }
 
-void	rra(stack *a)
+void	rra(t_stack *a)
 {
 	int	temp;
 	int	i;
 
 	if (a->top == -1)
 		return ;
-	temp = a->stack[0];
+	temp = a->t_stack[0];
 	i = 0;
 	while (i < a->top)
 	{
-		a->stack[i] = a->stack[i + 1];
+		a->t_stack[i] = a->t_stack[i + 1];
 		i++;
 	}
-	a->stack[a->top] = temp;
+	a->t_stack[a->top] = temp;
 	printf("rra\n");
 }
 
-void	rrb(stack *b)
+void	rrb(t_stack *b)
 {
 	int	temp;
 	int	i;
 
 	if (b->top == -1)
 		return ;
-	temp = b->stack[0];
+	temp = b->t_stack[0];
 	i = 0;
 	while (i < b->top)
 	{
-		b->stack[i] = b->stack[i + 1];
+		b->t_stack[i] = b->t_stack[i + 1];
 		i++;
 	}
-	b->stack[b->top] = temp;
+	b->t_stack[b->top] = temp;
 	printf("rrb\n");
 }
 
-void	rrr(stack *a, stack *b)
+void	rrr(t_stack *a, t_stack *b)
 {
 	rra(a);
 	rrb(b);
 	printf("rrr\n");
 }
 
-int	check_sorted(stack *a)
+int	check_sorted(t_stack *a)
 {
 	int	i;
 
@@ -269,14 +263,14 @@ int	check_sorted(stack *a)
 	i = 0;
 	while (i < a->top)
 	{
-		if (a->stack[i] < a->stack[i + 1])
+		if (a->t_stack[i] < a->t_stack[i + 1])
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int is_number(char *str)
+int	is_number(char *str)
 {
 	int	i;
 	int	len;
@@ -293,57 +287,65 @@ int is_number(char *str)
 	}
 	return (1);
 }
-int is_repeated(stack *s) {
-	for (int i = 0; i <= s->top; i++) {
-		for (int j = i + 1; j <= s->top; j++) {
-			if (s->stack[i] == s->stack[j]) {
-				return 1; // found a duplicate
-			}
-		}
-	}
-	return 0; // no duplicates found
-}
 
-void	ft_mid_sort(stack *stack_a)
+int	is_repeated(t_stack *s)
 {
-	int	v[3];
-	int	temp;
 	int	i;
 	int	j;
 
-	v[0] = stack_a->stack[0];
-	v[1] = stack_a->stack[1];
-	v[2] = stack_a->stack[2];
+	i = 0;
+	j = i + 1;
+	while (i <= s->top)
+	{
+		while (j <= s->top)
+		{
+			if (s->t_stack[i] == s->t_stack[j])
+				return (1);
+		j++;
+		}
+	i++;
+	}
+	return (0);
+}
+
+void	ft_mid_sort(t_stack *t_stack_a)
+{
+	int	v[3];
+
+	v[0] = t_stack_a->t_stack[0];
+	v[1] = t_stack_a->t_stack[1];
+	v[2] = t_stack_a->t_stack[2];
 	if ((v[2] > v[1]) && (v[2] > v[0]) && (v[1] > v[0]))
 	{
-		sa(stack_a);
-		rra(stack_a);
+		sa(t_stack_a);
+		rra(t_stack_a);
 		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
 	{
-		rra(stack_a);
-		sa(stack_a);
+		rra(t_stack_a);
+		sa(t_stack_a);
 		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
 	{
-		rra(stack_a);
+		rra(t_stack_a);
 		return ;
 	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
 	{
-		ra(stack_a);
+		ra(t_stack_a);
 		return ;
 	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
 	{
-		sa(stack_a);
+		sa(t_stack_a);
 		return ;
 	}
 }
+
 ///////////////////////////////////////////////////////////
-int		get_pivot(int *arr, int start, int end)
+int	get_pivot(int *arr, int start, int end)
 {
 	int	pivot;
 	int	mid;
@@ -362,112 +364,48 @@ int		get_pivot(int *arr, int start, int end)
 	return (pivot);
 }
 
-void	partition0(stack *a, stack *b, int start, int end)
+void	partitin(t_stack *a, t_stack *b, int start, int end)
 {
-	if (start >= end)
-		return ;
 	int	pivot_index;
 	int	pivot_value;
 	int	i;
-	int	temp;
 
-	temp = 0;
-	pivot_index = get_pivot(a->stack, start, end);
-	pivot_value = a->stack[pivot_index];
-	// printf("marhale1---------------------->, PI=%d, PV=%d\n", pivot_index, pivot_value);
-	// ptest(a);
-	// ptest(b);
+	if (start >= end)
+		return ;
+	pivot_index = get_pivot(a->t_stack, start, end);
+	pivot_value = a->t_stack[pivot_index];
 	i = a->size;
 	while (i)
 	{
-	// printf("***** i= %d\n", i);
-	// ptest(a);
-	// ptest(b);
-
-		if (a->stack[a->top] < pivot_value)
+		if (a->t_stack[a->top] < pivot_value)
 			pb(a, b);
-		else if (a->stack[a->top] == pivot_value)
+		else if (a->t_stack[a->top] == pivot_value)
 			pop(a);
-		// else if (a->top == pivot_index)
-		// 	rra(a);
-		else if (a->stack[a->top] > pivot_value)
+		else if (a->t_stack[a->top] > pivot_value)
 			ra(a);
 		i--;
-		
 	}
 	push_end(a, pivot_value);
-	// printf("marhale----------------------------->2  \n");
-	// ptest(a);
-	// ptest(b);
 	while (b->top >= 0)
-	{
 		pa(a, b);
-	}
-	// printf("marhale----------------------------->3  \n");
-	// ptest(a);
-	// ptest(b);
-	partition0(a, b, start, pivot_index - 1);
-	partition0(a, b, pivot_index + 1, end);
+	partitin(a, b, start, pivot_index - 1);
+	partitin(a, b, pivot_index + 1, end);
 }
 
-void	quicksort(stack *a, stack *b)
+void	quicksort(t_stack *a, t_stack *b)
 {
 	int	start;
-	int	end;
 
 	start = 0;
-	partition0(a, b, start, a->top);
+	partitin(a, b, start, a->top);
 	return ;
 }
 
-/// @brief ////////////////////////////////////
-/// @param a 
-/// @param b 
-/*
-void swap(int *a, int *b) {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-int	partition(stack *a, stack *b, int low, int high)
-{
-	int pivot = a->stack[high];
-	int i = low - 1;
-	for (int j = low; j < high; j++)
-	{
-		if (a->stack[j] > pivot) {
-			i++;
-			swap(&a->stack[i], &a->stack[j]);
-			ptest(a);
-		}
-	}
-	swap(&a->stack[i+1], &a->stack[high]);
-	return (i + 1);
-}
-
-void quick_sort(stack *a, stack *b, int low, int high) {
-	if (low < high) {
-		int pivot_index = partition(a, b, low, high);
-		quick_sort(a, b, low, pivot_index - 1);
-		quick_sort(a, b, pivot_index + 1, high);
-	}
-}
-*/
-/// @brief ////////////////////////////////////////////////
-/// @param a 
-/// @param b /
-
-void	sort_stack(stack *a, stack *b)
+void	sort(t_stack *a, t_stack *b)
 {
 	int	size;
-	int	temp;
-	int	i;
-	int	j;
-	int	median;
 
 	size = a->top + 1;
-	i = 0;
 	if (size == 2)
 	{
 		sa(a);
@@ -487,15 +425,11 @@ void	sort_stack(stack *a, stack *b)
 
 int	main(int argc, char *argv[])
 {
-	stack	a;
-	stack	b;
+	t_stack	a;
+	t_stack	b;
 	int		i;
 	int		num;
 
-	// char *my_argv[] = {"program_name", "-1", "2", "8", "5", "80", "-25"};
-	// argc = sizeof(my_argv) / sizeof(char *);
-	// argv = my_argv;
-	
 	if (argc == 1)
 		return (0);
 	init_stack(&a, argc - 1);
@@ -519,19 +453,12 @@ int	main(int argc, char *argv[])
 		write(1, "Error\n", 6);
 		return (0);
 	}
-
 	printf("a=");
 	ptest(&a);
-
-
-	sort_stack(&a, &b);
-
+	sort(&a, &b);
 	printf("a=");
 	ptest(&a);
-
-
-
 	free_stack(&a);
 	free_stack(&b);
-	return (0); 
+	return (0);
 }
