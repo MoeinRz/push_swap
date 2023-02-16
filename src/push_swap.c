@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/16 19:40:06 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/16 23:40:35 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ void	rrr(t_stack *a, t_stack *b)
 	printf("rrr\n");
 }
 
-int	check_sorted(t_stack *a)
+int	is_sorted(t_stack *a)
 {
 	int	i;
 
@@ -309,39 +309,182 @@ int	is_repeated(t_stack *s)
 	return (0);
 }
 
-void	ft_mid_sort(t_stack *t_stack_a)
+int	find_min(t_stack *s)
+{
+	int	min;
+	int	i;
+
+	i = 0;
+	min = 2147483647;
+	while (i <= s->top)
+	{
+		if (min > s->t_stack[i])
+			min = s->t_stack[i];
+		i++;
+	}
+	return (min);
+}
+
+int	find_max(t_stack *s)
+{
+	int	max;
+	int	i;
+
+	i = 0;
+	max = -2147483648;
+	while (i <= s->top)
+	{
+		if (max < s->t_stack[i])
+			max = s->t_stack[i];
+		i++;
+	}
+	return (max);
+}
+
+void	sort_3digit(t_stack *a)
 {
 	int	v[3];
 
-	v[0] = t_stack_a->t_stack[0];
-	v[1] = t_stack_a->t_stack[1];
-	v[2] = t_stack_a->t_stack[2];
+	v[0] = a->t_stack[0];
+	v[1] = a->t_stack[1];
+	v[2] = a->t_stack[2];
 	if ((v[2] > v[1]) && (v[2] > v[0]) && (v[1] > v[0]))
 	{
-		sa(t_stack_a);
-		rra(t_stack_a);
+		sa(a);
+		rra(a);
 		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
 	{
-		rra(t_stack_a);
-		sa(t_stack_a);
+		rra(a);
+		sa(a);
 		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
 	{
-		rra(t_stack_a);
+		rra(a);
 		return ;
 	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
 	{
-		ra(t_stack_a);
+		ra(a);
 		return ;
 	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
 	{
-		sa(t_stack_a);
+		sa(a);
 		return ;
+	}
+}
+
+void	sort_4digit(t_stack *a, t_stack *b)
+{
+	int	v[4];
+	int	min;
+
+	min = find_min(a);
+	v[0] = a->t_stack[0];
+	v[1] = a->t_stack[1];
+	v[2] = a->t_stack[2];
+	v[3] = a->t_stack[3];
+	if (v[3] == min)
+	{
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+	}
+	else if (v[2] == min)
+	{
+		ra(a);
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+	}
+	else if (v[1] == min)
+	{
+		ra(a);
+		ra(a);
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+	}
+	else
+	{
+		rra(a);
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+	}
+}
+
+void	sort_5digit(t_stack *a, t_stack *b)
+{
+	int	v[5];
+	int	min;
+	int	max;
+
+	min = find_min(a);
+	max = find_max(a);
+	v[0] = a->t_stack[0];
+	v[1] = a->t_stack[1];
+	v[2] = a->t_stack[2];
+	v[3] = a->t_stack[3];
+	v[4] = a->t_stack[4];
+	if (v[4] == min && v[0] == max)
+	{
+		pb(a, b);
+		rra(a);
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+		ra(a);
+		pa(a, b);
+	}
+	else if (v[0] == min && v[4] == max)
+	{
+		pb(a, b);
+		rra(a);
+		pb(a, b);
+		sort_3digit(a);
+		pa(a, b);
+		pa(a, b);
+		ra(a);
+	}
+	else if (v[4] == min)
+	{
+		pb(a, b);
+		sort_4digit(a, b);
+		pa(a, b);
+	}
+	else if (v[0] == min)
+	{
+		rra(a);
+		pb(a, b);
+		sort_4digit(a, b);
+		pa(a, b);
+	}
+	else if (v[1] == min)
+	{
+		rra(a);
+		rra(a);
+		pb(a, b);
+		sort_4digit(a, b);
+		pa(a, b);
+	}
+	else if (v[2] == min)
+	{
+		ra(a);
+		ra(a);
+		pb(a, b);
+		sort_4digit(a, b);
+		pa(a, b);
+	}
+	else
+	{
+		ra(a);
+		pb(a, b);
+		sort_4digit(a, b);
+		pa(a, b);
 	}
 }
 
@@ -408,20 +551,16 @@ void	sort(t_stack *a, t_stack *b)
 
 	size = a->top + 1;
 	if (size == 2)
-	{
 		sa(a);
-		return ;
-	}
 	else if (size == 3)
-	{
-		ft_mid_sort(a);
-		return ;
-	}
+		sort_3digit(a);
+	else if (size == 4)
+		sort_4digit(a, b);
+	else if (size == 5)
+		sort_5digit(a, b);
 	else
-	{
 		quicksort(a, b);
-		return ;
-	}
+	return ;
 }
 
 int	main(int argc, char *argv[])
@@ -447,7 +586,7 @@ int	main(int argc, char *argv[])
 		push(&a, num);
 		i++;
 	}
-	if (check_sorted(&a) == 1)
+	if (is_sorted(&a) == 1)
 		return (0);
 	if (is_repeated(&a) == 1)
 	{
