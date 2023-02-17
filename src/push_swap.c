@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/16 23:49:14 by moein            ###   ########.fr       */
+/*   Updated: 2023/02/17 20:06:32 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,23 +271,63 @@ int	is_sorted(t_stack *a)
 	return (1);
 }
 
+int	ft_isdigit(int a)
+{
+	if (a <= '9' && a >= '0')
+	{
+		return (a);
+	}
+	else
+		return (0);
+}
+
+int	ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
+}
+
 int	is_number(char *str)
 {
-	int	i;
-	int	len;
-
-	i = 0;
-	len = strlen(str);
-	if (len == 0)
-		return (0);
-	while (i < len)
+	while (*str && ft_isspace(*str))
 	{
-		if (!isdigit(str[i]) && str[i] != '-')
+		str++;
+	}
+	if (*str == '-' || *str == '+')
+	{
+		str++;
+	}
+	if (!*str)
+	{
+		return (0);
+	}
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+		{
 			return (0);
-		i++;
+		}
+		str++;
 	}
 	return (1);
 }
+
+// int	is_number(char *str)
+// {
+// 	int	i;
+// 	int	len;
+
+// 	i = 0;
+// 	len = strlen(str);
+// 	if (len == 0)
+// 		return (0);
+// 	while (i < len)
+// 	{
+// 		if (!isdigit(str[i]) && str[i] != '-')
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 int	is_repeated(t_stack *s)
 {
@@ -563,40 +603,149 @@ void	sort(t_stack *a, t_stack *b)
 	return ;
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
-	t_stack	a;
+	t_stack	a;	
 	t_stack	b;
-	int		i;
+	int		i = 1;
 	int		num;
+	int		count =0;
+	int		j;
+	char	*arg;
+	char	*token;
+		int arr_count = 0;
+	int *arr;
 
+	// char *my_argv[] = {"program_name", "53", "1", "4"};
+	// argc = sizeof(my_argv) / sizeof(char *);
+	// argv = my_argv;
 	if (argc == 1)
 		return (0);
-	init_stack(&a, argc - 1);
-	init_stack(&b, argc - 1);
-	i = 1;
-	while (i < argc)
+	// while (i < argc)
+	// {
+	// 	char *arg1 ;//= argv[i];
+	// 	char *token1 = strtok(arg1, " ");
+	// 	while (token1 != NULL)
+	// 	{
+	// 		if (!is_number(token1))
+	// 		{
+	// 			write(1, "Error\n", 6);
+	// 			return (0);
+	// 		}
+	// 		count++;
+	// 		token1 = strtok(NULL, " ");
+	// 	}
+	// 	i++;
+	// }
+	for (i = 1; i < argc; i++)
 	{
-		if (!is_number(argv[i]))
-		{
-			write(1, "Error\n", 6);
-			return (0);
+		j = 0;
+		while (argv[i][j] != '\0') {
+			if (argv[i][j] == ' ' || argv[i][j] == '\t') {
+				j++;
+				continue;
+			}
+			if (argv[i][j] == '+' || argv[i][j] == '-') {
+				j++;
+			}
+			if (argv[i][j] < '0' || argv[i][j] > '9') {
+				printf("Invalid character: %c\n", argv[i][j]);
+				return 1;
+			}
+			count++;
+			while (argv[i][j] >= '0' && argv[i][j] <= '9') {
+				j++;
+			}
 		}
-		num = atoi(argv[i]);
-		push(&a, num);
-		i++;
 	}
-	if (is_sorted(&a) == 1)
-		return (0);
-	if (is_repeated(&a) == 1)
+
+	init_stack(&a, count);
+	init_stack(&b, count);
+	printf("size_a= %d\n", a.size);
+	printf("size_b= %d\n", b.size);
+i = 1;
+	j = 0;
+
+while (i < argc)
+{
+	while (argv[i][j] != '\0')
 	{
-		write(1, "Error\n", 6);
-		return (0);
+		if (argv[i][j] == ' ' || argv[i][j] == '\t')
+		{
+			j++;
+			continue;
+		}
+		int sign = 1;
+		if (argv[i][j] == '+')
+		{
+			j++;
+		}
+		else if (argv[i][j] == '-')
+		{
+			sign = -1;
+			j++;
+		}
+		num = 0;
+		while (argv[i][j] >= '0' && argv[i][j] <= '9')
+		{
+			num = num * 10 + (argv[i][j] - '0');
+			j++;
+		}
+		num = num * sign;
+		push(&a, num);
 	}
+	j = 0;
+i++;
+	printf("----------------");
+}
+			
+// 		arg[count] = argv[i][j];
+// 		token[count] = strtok(arg, " ");
+
+// 	printf("argv[%d]: %s\n", i, argv[i]);
+// 	// printf("%s\n", token);
+// 	while (token != NULL)
+// 	{
+// 		if (!is_number(token))
+// 		{
+// 			write(1, "Error\n", 6);
+// 			return (0);
+// 		}
+// 		num = atoi(token);
+// 		push(&a, num);
+// 		token = strtok(NULL, " ");
+// 	}
+// 	i++;
+// }
+
+
+	// while (i < argc)
+	// {
+	// 	if (!is_number(argv[i]))
+	// 	{
+	// 		write(1, "Error\n", 6);
+	// 		return (0);
+	// 	}
+	// 	num = atoi(argv[i]);
+	// 	push(&a, num);
+	// 	i++;
+	// }
+	// if (is_sorted(&a) == 1)
+	// 	return (0);
+	// if (is_repeated(&a) == 1)
+	// {
+	// 	write(1, "Error\n", 6);
+	// 	return (0);
+	// }
+	
 	printf("a=");
 	ptest(&a);
-	sort(&a, &b);
-	printf("a=");
+	// printf("b=");
+	// ptest(&b);
+	// printf("size_a= %d\n", a.size);
+	// printf("size_b= %d\n", b.size);
+	//sort(&a, &b);
+	// printf("a=");
 	ptest(&a);
 	free_stack(&a);
 	free_stack(&b);
