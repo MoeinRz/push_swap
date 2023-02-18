@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/18 14:40:34 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/18 18:06:17 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -500,6 +500,45 @@ void	sort_5digit(t_stack *a, t_stack *b)
 }
 
 ///////////////////////////////////////////////////////////
+// void swap(int* a, int* b)
+// {
+// 	int t = *a;
+// 	*a = *b;
+// 	*b = t;
+// }
+
+// int	get_pivot2(int *arr, int start, int end)
+// {
+// 	int	pivot = arr[end];
+// 	int i = start - 1;
+
+// 	for (int j = start; j <= end - 1; j++)
+// 	{
+// 		if (arr[j] < pivot)
+// 		{
+// 			i++;
+// 			swap(&arr[i], &arr[j]);
+// 		}
+// 	}
+// 	swap(&arr[i + 1], &arr[end]);
+// 	return (i + 1);
+// }
+// void	partition2(t_stack *a, t_stack *b, int start, int end)
+// {
+// 	int	pi;
+
+// 	if (start < end)
+// 	{
+// 		pi = get_pivot2(a->t_stack, start, end);
+// 		partition2(a, b, start, pi - 1);
+// 		partition2(a, b, pi + 1, end);
+// 	}
+// }
+int get_pivot_rand(int *arr, int start, int end)
+{
+  return (start + (rand() % (end - start + 1)));
+}
+
 int	get_pivot(int *arr, int start, int end)
 {
 	int	pivot;
@@ -525,9 +564,18 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 	int	pivot_value;
 	int	i;
 
-	if (start >= end)
+	if (start > end)
 		return ;
-	pivot_index = get_pivot(a->t_stack, start, end);
+//	pivot_index = get_pivot(a->t_stack, start, end);
+	if (a->t_stack[get_pivot(a->t_stack, start, end)] == a->t_stack[pivot_index])
+	{
+		if (pivot_index + 1 >= end)
+			pivot_index--;
+		else if (pivot_index - 1 <= start)
+			pivot_index++;
+	}
+	else
+		pivot_index = get_pivot(a->t_stack, start, end);
 	pivot_value = a->t_stack[pivot_index];
 	i = a->size;
 	while (i)
@@ -541,10 +589,18 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 		i--;
 	}
 	push_end(a, pivot_value);
+	// printf("pivot_value===================> [%d]\n", pivot_value);
+	// printf("a=");
+	// ptest(a);
+	// printf("b=");
+	// ptest(b);
 	while (b->top >= 0)
 		pa(a, b);
+	// printf("a2=");
+	// ptest(a);
 	partitin(a, b, start, pivot_index - 1);
 	partitin(a, b, pivot_index + 1, end);
+	//printf("pivot_value2=%d", pivot_value);
 }
 
 void	quicksort(t_stack *a, t_stack *b)
@@ -553,6 +609,8 @@ void	quicksort(t_stack *a, t_stack *b)
 
 	start = 0;
 	partitin(a, b, start, a->top);
+	if (!is_sorted(a))
+		partitin(a, b, start, a->top);
 	return ;
 }
 
@@ -658,7 +716,9 @@ int	main(int argc, char **argv)
 {
 	t_stack	a;	
 	t_stack	b;
-
+	// char *my_argv[] = {"program_name", "1 5 6 51515 -9 90"};
+	// argc = sizeof(my_argv) / sizeof(char *);
+	// argv = my_argv;
 	if (argc == 1)
 		return (0);
 	if (!input_size(argc, argv))
@@ -679,9 +739,11 @@ int	main(int argc, char **argv)
 		ft_error(&a, &b, 1);
 		return (0);
 	}
+	// ptest(&a);
+	// ptest(&b);
 	ft_sort(&a, &b);
-	ptest(&a);
-	ptest(&b);
+	//ptest(&a);
+	// ptest(&b);
 	free_stack(&a);
 	free_stack(&b);
 	return (1);
