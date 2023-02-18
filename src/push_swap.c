@@ -6,15 +6,13 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/18 11:56:30 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/18 14:40:34 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include <push_swap.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include <unistd.h>
 
 typedef struct s_stack{
@@ -283,7 +281,8 @@ int	ft_isdigit(int a)
 
 int	ft_isspace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v'	|| \
+		c == '\f' || c == '\r');
 }
 
 int	is_number(char *str)
@@ -310,24 +309,6 @@ int	is_number(char *str)
 	}
 	return (1);
 }
-
-// int	is_number(char *str)
-// {
-// 	int	i;
-// 	int	len;
-
-// 	i = 0;
-// 	len = strlen(str);
-// 	if (len == 0)
-// 		return (0);
-// 	while (i < len)
-// 	{
-// 		if (!isdigit(str[i]) && str[i] != '-')
-// 			return (0);
-// 		i++;
-// 	}
-// 	return (1);
-// }
 
 int	is_repeated(t_stack *s)
 {
@@ -392,29 +373,19 @@ void	sort_3digit(t_stack *a)
 	{
 		sa(a);
 		rra(a);
-		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
 	{
 		rra(a);
 		sa(a);
-		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
-	{
 		rra(a);
-		return ;
-	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
-	{
 		ra(a);
-		return ;
-	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
-	{
 		sa(a);
-		return ;
-	}
+	return ;
 }
 
 void	sort_4digit(t_stack *a, t_stack *b)
@@ -585,7 +556,7 @@ void	quicksort(t_stack *a, t_stack *b)
 	return ;
 }
 
-void	sort(t_stack *a, t_stack *b)
+void	ft_sort(t_stack *a, t_stack *b)
 {
 	int	size;
 
@@ -603,55 +574,49 @@ void	sort(t_stack *a, t_stack *b)
 	return ;
 }
 
-int	main(int argc, char **argv)
+int	input_size(int argc, char **argv)
 {
-	t_stack	a;	
-	t_stack	b;
-	int		i = 1;
-	int		num;
-	int		count =0;
-	int		j;
-	char	*arg;
-	char	*token;
-	int		arr_count = 0;
-	int		*arr;
+	int	count;
+	int	i;
+	int	j;
 
-	// char *my_argv[] = {"program_name", "53", "1", "4"};
-	// argc = sizeof(my_argv) / sizeof(char *);
-	// argv = my_argv;
-	if (argc == 1)
-		return (0);
 	i = 1;
+	count = 0;
 	while (i < argc)
-	{
+	{	
 		j = 0;
 		while (argv[i][j] != '\0')
 		{
-			if (argv[i][j] == ' ' || argv[i][j] == '\t') {
-				j++;
-				continue;
-			}
-			if (argv[i][j] == '+' || argv[i][j] == '-') {
-				j++;
-			}
-			if (!isdigit(argv[i][j]))
+			if (argv[i][j] == ' ' || argv[i][j] == '\t')
 			{
-				write(1, "Error\n", 6);
-	 			return (0);
+				j++;
+				continue ;
 			}
+			if (argv[i][j] == '+' || argv[i][j] == '-')
+			{
+				j++;
+			}
+			if (!ft_isdigit(argv[i][j]))
+				return (0);
 			count++;
-			while (isdigit(argv[i][j]))
+			while (ft_isdigit(argv[i][j]))
 				j++;
 		}
-		i++;
+	i++;
 	}
-	init_stack(&a, count);
-	init_stack(&b, count);
-	printf("size_a= %d\n", a.size);
-	printf("size_b= %d\n", b.size);
-	i = 1;
+	return (count);
+}
+
+void	input_to_stack(t_stack *a, int argc, char **argv)
+{
+	int	i;
+	int	j;
+	int	num;
+	int	sign;
+
+	i = 0;
 	j = 0;
-	while (i < argc)
+	while (++i < argc)
 	{
 		while (argv[i][j] != '\0')
 		{
@@ -660,44 +625,64 @@ int	main(int argc, char **argv)
 				j++;
 				continue ;
 			}
-			int sign = 1;
+			sign = 1;
 			if (argv[i][j] == '+')
-			{
 				j++;
-			}
 			else if (argv[i][j] == '-')
 			{
 				sign = -1;
 				j++;
 			}
 			num = 0;
-			while (argv[i][j] >= '0' && argv[i][j] <= '9')
+			while (ft_isdigit(argv[i][j]))
 			{
 				num = num * 10 + (argv[i][j] - '0');
 				j++;
 			}
-			push(&a, num * sign);
+			push(a, num * sign);
 		}
 		j = 0;
-		i++;
-	}		
-	if (is_sorted(&a) == 1)
-		return (0);
-	if (is_repeated(&a) == 1)
-	{
+	}	
+}
+
+void	ft_error(t_stack *a, t_stack *b, int print)
+{
+	if (print)
 		write(1, "Error\n", 6);
+	free_stack(a);
+	free_stack(b);
+	return ;
+}
+
+int	main(int argc, char **argv)
+{
+	t_stack	a;	
+	t_stack	b;
+
+	if (argc == 1)
+		return (0);
+	if (!input_size(argc, argv))
+	{
+		ft_error(&a, &b, 1);
 		return (0);
 	}
-	printf("a=");
+	init_stack(&a, input_size(argc, argv));
+	init_stack(&b, input_size(argc, argv));
+	input_to_stack(&a, argc, argv);
+	if (is_sorted(&a))
+	{
+		ft_error(&a, &b, 0);
+		return (0);
+	}
+	if (is_repeated(&a))
+	{
+		ft_error(&a, &b, 1);
+		return (0);
+	}
+	ft_sort(&a, &b);
 	ptest(&a);
-	// printf("b=");
-	// ptest(&b);
-	// printf("size_a= %d\n", a.size);
-	// printf("size_b= %d\n", b.size);
-	sort(&a, &b);
-	// printf("a=");
-	ptest(&a);
+	ptest(&b);
 	free_stack(&a);
 	free_stack(&b);
-	return (0);
+	return (1);
 }
