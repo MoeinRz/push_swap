@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/17 20:06:32 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/18 11:56:30 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,34 +613,20 @@ int	main(int argc, char **argv)
 	int		j;
 	char	*arg;
 	char	*token;
-		int arr_count = 0;
-	int *arr;
+	int		arr_count = 0;
+	int		*arr;
 
 	// char *my_argv[] = {"program_name", "53", "1", "4"};
 	// argc = sizeof(my_argv) / sizeof(char *);
 	// argv = my_argv;
 	if (argc == 1)
 		return (0);
-	// while (i < argc)
-	// {
-	// 	char *arg1 ;//= argv[i];
-	// 	char *token1 = strtok(arg1, " ");
-	// 	while (token1 != NULL)
-	// 	{
-	// 		if (!is_number(token1))
-	// 		{
-	// 			write(1, "Error\n", 6);
-	// 			return (0);
-	// 		}
-	// 		count++;
-	// 		token1 = strtok(NULL, " ");
-	// 	}
-	// 	i++;
-	// }
-	for (i = 1; i < argc; i++)
+	i = 1;
+	while (i < argc)
 	{
 		j = 0;
-		while (argv[i][j] != '\0') {
+		while (argv[i][j] != '\0')
+		{
 			if (argv[i][j] == ' ' || argv[i][j] == '\t') {
 				j++;
 				continue;
@@ -648,103 +634,67 @@ int	main(int argc, char **argv)
 			if (argv[i][j] == '+' || argv[i][j] == '-') {
 				j++;
 			}
-			if (argv[i][j] < '0' || argv[i][j] > '9') {
-				printf("Invalid character: %c\n", argv[i][j]);
-				return 1;
+			if (!isdigit(argv[i][j]))
+			{
+				write(1, "Error\n", 6);
+	 			return (0);
 			}
 			count++;
-			while (argv[i][j] >= '0' && argv[i][j] <= '9') {
+			while (isdigit(argv[i][j]))
 				j++;
-			}
 		}
+		i++;
 	}
-
 	init_stack(&a, count);
 	init_stack(&b, count);
 	printf("size_a= %d\n", a.size);
 	printf("size_b= %d\n", b.size);
-i = 1;
+	i = 1;
 	j = 0;
-
-while (i < argc)
-{
-	while (argv[i][j] != '\0')
+	while (i < argc)
 	{
-		if (argv[i][j] == ' ' || argv[i][j] == '\t')
+		while (argv[i][j] != '\0')
 		{
-			j++;
-			continue;
+			if (argv[i][j] == ' ' || argv[i][j] == '\t')
+			{
+				j++;
+				continue ;
+			}
+			int sign = 1;
+			if (argv[i][j] == '+')
+			{
+				j++;
+			}
+			else if (argv[i][j] == '-')
+			{
+				sign = -1;
+				j++;
+			}
+			num = 0;
+			while (argv[i][j] >= '0' && argv[i][j] <= '9')
+			{
+				num = num * 10 + (argv[i][j] - '0');
+				j++;
+			}
+			push(&a, num * sign);
 		}
-		int sign = 1;
-		if (argv[i][j] == '+')
-		{
-			j++;
-		}
-		else if (argv[i][j] == '-')
-		{
-			sign = -1;
-			j++;
-		}
-		num = 0;
-		while (argv[i][j] >= '0' && argv[i][j] <= '9')
-		{
-			num = num * 10 + (argv[i][j] - '0');
-			j++;
-		}
-		num = num * sign;
-		push(&a, num);
+		j = 0;
+		i++;
+	}		
+	if (is_sorted(&a) == 1)
+		return (0);
+	if (is_repeated(&a) == 1)
+	{
+		write(1, "Error\n", 6);
+		return (0);
 	}
-	j = 0;
-i++;
-	printf("----------------");
-}
-			
-// 		arg[count] = argv[i][j];
-// 		token[count] = strtok(arg, " ");
-
-// 	printf("argv[%d]: %s\n", i, argv[i]);
-// 	// printf("%s\n", token);
-// 	while (token != NULL)
-// 	{
-// 		if (!is_number(token))
-// 		{
-// 			write(1, "Error\n", 6);
-// 			return (0);
-// 		}
-// 		num = atoi(token);
-// 		push(&a, num);
-// 		token = strtok(NULL, " ");
-// 	}
-// 	i++;
-// }
-
-
-	// while (i < argc)
-	// {
-	// 	if (!is_number(argv[i]))
-	// 	{
-	// 		write(1, "Error\n", 6);
-	// 		return (0);
-	// 	}
-	// 	num = atoi(argv[i]);
-	// 	push(&a, num);
-	// 	i++;
-	// }
-	// if (is_sorted(&a) == 1)
-	// 	return (0);
-	// if (is_repeated(&a) == 1)
-	// {
-	// 	write(1, "Error\n", 6);
-	// 	return (0);
-	// }
-	
 	printf("a=");
 	ptest(&a);
 	// printf("b=");
 	// ptest(&b);
 	// printf("size_a= %d\n", a.size);
 	// printf("size_b= %d\n", b.size);
-	//sort(&a, &b);
+	sort(&a, &b);
 	// printf("a=");
 	ptest(&a);
 	free_stack(&a);
