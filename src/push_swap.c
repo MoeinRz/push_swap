@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/19 15:43:40 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/19 23:21:03 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -529,6 +529,7 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 		return ;
 	pivot_index = get_pivot(a->t_stack, start, end);
 	pivot_value = a->t_stack[pivot_index];
+	// printf("pivot===================>[%d]\n", pivot_value);
 	i = a->size;
 	while (i)
 	{
@@ -546,10 +547,12 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 	// ptest(a);
 	// printf("b=");
 	// ptest(b);
+	// printf("a=");
+	// ptest(a);
+	// printf("b=");
+	// ptest(b);
 	while (b->top >= 0)
 		pa(a, b);
-	// printf("a2=");
-	// ptest(a);
 	partitin(a, b, start, pivot_index - 1);
 	partitin(a, b, pivot_index + 1, end);
 	//printf("pivot_value2=%d", pivot_value);
@@ -623,19 +626,45 @@ void	min_max(t_stack *a, t_stack *b)
 	return ;
 }
 
+void	ft_repleace(t_stack *arr, t_stack *b)
+{
+	int size = arr->size;
+	int *sorted = malloc(size * sizeof(int));
+	for (int i = 0; i < size; i++) {
+		sorted[i] = arr->t_stack[i];
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = i + 1; j < size; j++) {
+			if (sorted[i] > sorted[j]) {
+				int temp = sorted[i];
+				sorted[i] = sorted[j];
+				sorted[j] = temp;
+			}
+		}
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (arr->t_stack[i] == sorted[j]) {
+				arr->t_stack[i] = j;
+				break;
+			}
+		}
+	}
+	free(sorted);
+}
+
 void	quicksort(t_stack *a, t_stack *b)
 {
 	int	start;
 
 	start = 0;
-//	partitin(a, b, start, a->top);
-//	while (!is_sorted(a))
-//	{
-		min_max(a, b);
-		while (b->top != -1)
-			pa(a, b);
-//	}
-		//partitin(a, b, start, a->top);
+	partitin(a, b, 0, a->top);
+	// while (!is_sorted(a))
+	// 	partitin(a, b, start, a->top);
+
+	// min_max(a, b);
+	// while (b->top != -1)
+	// 	pa(a, b);
 	return ;
 }
 
@@ -764,14 +793,16 @@ int	main(int argc, char **argv)
 		ft_error(&a, &b, 1);
 		return (0);
 	}
-	// ptest(&a);
-	// ptest(&b);
-	ft_sort(&a, &b);
-	//pa(&a, &b);
+		printf("a=");
+	ptest(&a);
+	ptest(&b);
+	ft_repleace(&a, &b);
+	//ft_sort(&a, &b);
+//	pa(&a, &b);
 	printf("a=");
 	ptest(&a);
-	// printf("b=");
-	// ptest(&b);
+	printf("b=");
+	ptest(&b);
 	free_stack(&a);
 	free_stack(&b);
 	return (1);
