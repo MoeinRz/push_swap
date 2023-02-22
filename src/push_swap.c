@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/16 23:49:14 by moein            ###   ########.fr       */
+/*   Updated: 2023/02/19 23:21:03 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include <push_swap.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include <unistd.h>
 
 typedef struct s_stack{
@@ -271,20 +269,43 @@ int	is_sorted(t_stack *a)
 	return (1);
 }
 
+int	ft_isdigit(int a)
+{
+	if (a <= '9' && a >= '0')
+	{
+		return (a);
+	}
+	else
+		return (0);
+}
+
+int	ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v'	|| \
+		c == '\f' || c == '\r');
+}
+
 int	is_number(char *str)
 {
-	int	i;
-	int	len;
-
-	i = 0;
-	len = strlen(str);
-	if (len == 0)
-		return (0);
-	while (i < len)
+	while (*str && ft_isspace(*str))
 	{
-		if (!isdigit(str[i]) && str[i] != '-')
+		str++;
+	}
+	if (*str == '-' || *str == '+')
+	{
+		str++;
+	}
+	if (!*str)
+	{
+		return (0);
+	}
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+		{
 			return (0);
-		i++;
+		}
+		str++;
 	}
 	return (1);
 }
@@ -352,29 +373,19 @@ void	sort_3digit(t_stack *a)
 	{
 		sa(a);
 		rra(a);
-		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
 	{
 		rra(a);
 		sa(a);
-		return ;
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
-	{
 		rra(a);
-		return ;
-	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
-	{
 		ra(a);
-		return ;
-	}
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
-	{
 		sa(a);
-		return ;
-	}
+	return ;
 }
 
 void	sort_4digit(t_stack *a, t_stack *b)
@@ -514,10 +525,11 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 	int	pivot_value;
 	int	i;
 
-	if (start >= end)
+	if (start > end)
 		return ;
 	pivot_index = get_pivot(a->t_stack, start, end);
 	pivot_value = a->t_stack[pivot_index];
+	// printf("pivot===================>[%d]\n", pivot_value);
 	i = a->size;
 	while (i)
 	{
@@ -530,10 +542,115 @@ void	partitin(t_stack *a, t_stack *b, int start, int end)
 		i--;
 	}
 	push_end(a, pivot_value);
+	// printf("pivot_value===================> [%d]\n", pivot_value);
+	// printf("a=");
+	// ptest(a);
+	// printf("b=");
+	// ptest(b);
+	// printf("a=");
+	// ptest(a);
+	// printf("b=");
+	// ptest(b);
 	while (b->top >= 0)
 		pa(a, b);
 	partitin(a, b, start, pivot_index - 1);
 	partitin(a, b, pivot_index + 1, end);
+	//printf("pivot_value2=%d", pivot_value);
+}
+
+void	min_max(t_stack *a, t_stack *b)
+{
+	int	min;
+	int	max;
+	int	i;
+	int	min_i, max_i;
+	int	mid;
+
+	i = 0;
+	min = 2147483647;
+	max = -2147483648;
+	while (i <= a->top)
+	{
+		if (min > a->t_stack[i])
+		{
+			min = a->t_stack[i];
+			min_i = i;
+		}
+		if (max < a->t_stack[i])
+		{
+			max = a->t_stack[i];
+			max_i = i;
+		}
+		i++;
+	}
+	mid = a->size / 2;
+	if ((abs(mid) - min_i) >=  abs((mid) - max_i))
+	{
+		if (min_i >= mid)
+		{
+			while (a->t_stack[a->top] != min)
+				ra(a);
+			pb(a, b);
+		}
+		else
+		{
+			while (a->t_stack[a->top] != min)
+				rra(a);
+			pb(a, b);
+		}
+	}
+	else
+	{
+		if (max_i > mid)
+		{
+			while (a->t_stack[a->top] != max)
+				ra(a);
+			pb(a, b);
+			rb(b);
+		}
+		else
+		{
+			while (a->t_stack[a->top] != max)
+				rra(a);
+			pb(a, b);
+			rb(b);
+		}
+	}
+	if (!is_sorted(a))
+		min_max(a, b);
+	else
+		while (a->top != -1)
+			pb(a, b);
+	while (b->t_stack[b->top] != max)
+		rrb(b);
+	return ;
+}
+
+void	ft_repleace(t_stack *arr, t_stack *b)
+{
+	int size = arr->size;
+	int *sorted = malloc(size * sizeof(int));
+	for (int i = 0; i < size; i++) {
+		sorted[i] = arr->t_stack[i];
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = i + 1; j < size; j++) {
+			if (sorted[i] > sorted[j]) {
+				int temp = sorted[i];
+				sorted[i] = sorted[j];
+				sorted[j] = temp;
+			}
+		}
+	}
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (arr->t_stack[i] == sorted[j]) {
+				arr->t_stack[i] = j;
+				break;
+			}
+		}
+	}
+	free(sorted);
 }
 
 void	quicksort(t_stack *a, t_stack *b)
@@ -541,11 +658,17 @@ void	quicksort(t_stack *a, t_stack *b)
 	int	start;
 
 	start = 0;
-	partitin(a, b, start, a->top);
+	partitin(a, b, 0, a->top);
+	// while (!is_sorted(a))
+	// 	partitin(a, b, start, a->top);
+
+	// min_max(a, b);
+	// while (b->top != -1)
+	// 	pa(a, b);
 	return ;
 }
 
-void	sort(t_stack *a, t_stack *b)
+void	ft_sort(t_stack *a, t_stack *b)
 {
 	int	size;
 
@@ -563,42 +686,124 @@ void	sort(t_stack *a, t_stack *b)
 	return ;
 }
 
-int	main(int argc, char *argv[])
+int	input_size(int argc, char **argv)
 {
-	t_stack	a;
-	t_stack	b;
-	int		i;
-	int		num;
+	int	count;
+	int	i;
+	int	j;
 
+	i = 1;
+	count = 0;
+	while (i < argc)
+	{	
+		j = 0;
+		while (argv[i][j] != '\0')
+		{
+			if (argv[i][j] == ' ' || argv[i][j] == '\t')
+			{
+				j++;
+				continue ;
+			}
+			if (argv[i][j] == '+' || argv[i][j] == '-')
+			{
+				j++;
+			}
+			if (!ft_isdigit(argv[i][j]))
+				return (0);
+			count++;
+			while (ft_isdigit(argv[i][j]))
+				j++;
+		}
+	i++;
+	}
+	return (count);
+}
+
+void	input_to_stack(t_stack *a, int argc, char **argv)
+{
+	int	i;
+	int	j;
+	int	num;
+	int	sign;
+
+	i = 0;
+	j = 0;
+	while (++i < argc)
+	{
+		while (argv[i][j] != '\0')
+		{
+			if (argv[i][j] == ' ' || argv[i][j] == '\t')
+			{
+				j++;
+				continue ;
+			}
+			sign = 1;
+			if (argv[i][j] == '+')
+				j++;
+			else if (argv[i][j] == '-')
+			{
+				sign = -1;
+				j++;
+			}
+			num = 0;
+			while (ft_isdigit(argv[i][j]))
+			{
+				num = num * 10 + (argv[i][j] - '0');
+				j++;
+			}
+			push(a, num * sign);
+		}
+		j = 0;
+	}	
+}
+
+void	ft_error(t_stack *a, t_stack *b, int print)
+{
+	if (print)
+		write(1, "Error\n", 6);
+	free_stack(a);
+	free_stack(b);
+	return ;
+}
+
+int	main(int argc, char **argv)
+{
+	t_stack	a;	
+	t_stack	b;
+	// char *my_argv[] = {"program_name", "68 19 60 89 47 2 12 92 41 49 36 11 53 72 26 95 8 71 32 45 28 9 50 33 35 99 37 25 80 88 96 30 42 22 79 87 61 90 76 38 1 20 17 44 91 59 46 69 23 83 54 15 8414 55 98 43 18 84881 16 85 24 77 70 31 1463 29 78 65 -57 10 56 97 3 67 52 39 63 75 455640 -21 58 6-544 66 82 -545451 48 73 256457 9844 4 7 62 -65434 86 -5"};
+	// argc = sizeof(my_argv) / sizeof(char *);
+	// argv = my_argv;
 	if (argc == 1)
 		return (0);
-	init_stack(&a, argc - 1);
-	init_stack(&b, argc - 1);
-	i = 1;
-	while (i < argc)
+	if (!input_size(argc, argv))
 	{
-		if (!is_number(argv[i]))
-		{
-			write(1, "Error\n", 6);
-			return (0);
-		}
-		num = atoi(argv[i]);
-		push(&a, num);
-		i++;
-	}
-	if (is_sorted(&a) == 1)
-		return (0);
-	if (is_repeated(&a) == 1)
-	{
-		write(1, "Error\n", 6);
+		ft_error(&a, &b, 1);
 		return (0);
 	}
+	init_stack(&a, input_size(argc, argv));
+	init_stack(&b, input_size(argc, argv));
+	input_to_stack(&a, argc, argv);
+	if (is_sorted(&a))
+	{
+		ft_error(&a, &b, 0);
+		return (0);
+	}
+	if (is_repeated(&a))
+	{
+		ft_error(&a, &b, 1);
+		return (0);
+	}
+		printf("a=");
+	ptest(&a);
+	ptest(&b);
+	ft_repleace(&a, &b);
+	//ft_sort(&a, &b);
+//	pa(&a, &b);
 	printf("a=");
 	ptest(&a);
-	sort(&a, &b);
-	printf("a=");
-	ptest(&a);
+	printf("b=");
+	ptest(&b);
 	free_stack(&a);
 	free_stack(&b);
-	return (0);
+	return (1);
 }
