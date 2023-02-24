@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/19 23:21:03 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/23 20:13:09 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,8 +281,8 @@ int	ft_isdigit(int a)
 
 int	ft_isspace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v'	|| \
-		c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || \
+	c == '\f' || c == '\r');
 }
 
 int	is_number(char *str)
@@ -388,6 +388,23 @@ void	sort_3digit(t_stack *a)
 	return ;
 }
 
+void	ft_action_01(t_stack *a, t_stack *b)
+{
+	ra(a);
+	ra(a);
+	pb(a, b);
+	sort_3digit(a);
+	pa(a, b);
+}
+
+void	ft_action_02(t_stack *a, t_stack *b)
+{
+	rra(a);
+	pb(a, b);
+	sort_3digit(a);
+	pa(a, b);
+}
+
 void	sort_4digit(t_stack *a, t_stack *b)
 {
 	int	v[4];
@@ -412,20 +429,72 @@ void	sort_4digit(t_stack *a, t_stack *b)
 		pa(a, b);
 	}
 	else if (v[1] == min)
-	{
-		ra(a);
-		ra(a);
-		pb(a, b);
-		sort_3digit(a);
-		pa(a, b);
-	}
+		ft_action_01(a, b);
 	else
-	{
-		rra(a);
-		pb(a, b);
-		sort_3digit(a);
-		pa(a, b);
-	}
+		ft_action_02(a, b);
+}
+
+void	ft_action_03(t_stack *a, t_stack *b)
+{
+	pb(a, b);
+	rra(a);
+	pb(a, b);
+	sort_3digit(a);
+	pa(a, b);
+	ra(a);
+	pa(a, b);
+}
+
+void	ft_action_04(t_stack *a, t_stack *b)
+{
+	pb(a, b);
+	rra(a);
+	pb(a, b);
+	sort_3digit(a);
+	pa(a, b);
+	pa(a, b);
+	ra(a);
+}
+
+void	ft_action_05(t_stack *a, t_stack *b)
+{
+	rra(a);
+	rra(a);
+	pb(a, b);
+	sort_4digit(a, b);
+	pa(a, b);
+}
+
+void	ft_action_06(t_stack *a, t_stack *b)
+{
+	ra(a);
+	ra(a);
+	pb(a, b);
+	sort_4digit(a, b);
+	pa(a, b);
+}
+
+void	ft_action_07(t_stack *a, t_stack *b)
+{
+	ra(a);
+	pb(a, b);
+	sort_4digit(a, b);
+	pa(a, b);
+}
+
+void	ft_action_08(t_stack *a, t_stack *b)
+{
+	rra(a);
+	pb(a, b);
+	sort_4digit(a, b);
+	pa(a, b);
+}
+
+void	ft_action_09(t_stack *a, t_stack *b)
+{
+	pb(a, b);
+	sort_4digit(a, b);
+	pa(a, b);
 }
 
 void	sort_5digit(t_stack *a, t_stack *b)
@@ -442,140 +511,87 @@ void	sort_5digit(t_stack *a, t_stack *b)
 	v[3] = a->t_stack[3];
 	v[4] = a->t_stack[4];
 	if (v[4] == min && v[0] == max)
-	{
-		pb(a, b);
-		rra(a);
-		pb(a, b);
-		sort_3digit(a);
-		pa(a, b);
-		ra(a);
-		pa(a, b);
-	}
+		ft_action_03(a, b);
 	else if (v[0] == min && v[4] == max)
-	{
-		pb(a, b);
-		rra(a);
-		pb(a, b);
-		sort_3digit(a);
-		pa(a, b);
-		pa(a, b);
-		ra(a);
-	}
+		ft_action_04(a, b);
 	else if (v[4] == min)
-	{
-		pb(a, b);
-		sort_4digit(a, b);
-		pa(a, b);
-	}
+		ft_action_09(a, b);
 	else if (v[0] == min)
-	{
-		rra(a);
-		pb(a, b);
-		sort_4digit(a, b);
-		pa(a, b);
-	}
+		ft_action_08(a, b);
 	else if (v[1] == min)
-	{
-		rra(a);
-		rra(a);
-		pb(a, b);
-		sort_4digit(a, b);
-		pa(a, b);
-	}
+		ft_action_05(a, b);
 	else if (v[2] == min)
-	{
-		ra(a);
-		ra(a);
-		pb(a, b);
-		sort_4digit(a, b);
-		pa(a, b);
-	}
+		ft_action_06(a, b);
 	else
-	{
-		ra(a);
-		pb(a, b);
-		sort_4digit(a, b);
-		pa(a, b);
-	}
+		ft_action_07(a, b);
 }
 
-///////////////////////////////////////////////////////////
-int	get_pivot(int *arr, int start, int end)
+void	ft_presort(t_stack *a, int	*sorted)
 {
-	int	pivot;
-	int	mid;
-
-	mid = (start + end) / 2;
-	if (arr[start] >= arr[end] && arr[start] <= arr[mid])
-		pivot = start;
-	else if (arr[start] >= arr[mid] && arr[start] <= arr[end])
-		pivot = start;
-	else if (arr[end] >= arr[start] && arr[end] <= arr[mid])
-		pivot = end;
-	else if (arr[end] >= arr[mid] && arr[end] <= arr[start])
-		pivot = end;
-	else
-		pivot = mid;
-	return (pivot);
-}
-
-void	partitin(t_stack *a, t_stack *b, int start, int end)
-{
-	int	pivot_index;
-	int	pivot_value;
 	int	i;
+	int	j;
+	int	size;
+	int	tmp;
 
-	if (start > end)
-		return ;
-	pivot_index = get_pivot(a->t_stack, start, end);
-	pivot_value = a->t_stack[pivot_index];
-	// printf("pivot===================>[%d]\n", pivot_value);
-	i = a->size;
-	while (i)
+	size = a->size;
+	i = -1;
+	while (i++ < size)
+		sorted[i] = a->t_stack[i];
+	i = -1;
+	while (i++ < size)
 	{
-		if (a->t_stack[a->top] < pivot_value)
-			pb(a, b);
-		else if (a->t_stack[a->top] == pivot_value)
-			pop(a);
-		else if (a->t_stack[a->top] > pivot_value)
-			ra(a);
-		i--;
+		j = i + 1;
+		while (j < size)
+		{
+			if (sorted[i] > sorted[j])
+			{
+				tmp = sorted[i];
+				sorted[i] = sorted[j];
+				sorted[j] = tmp;
+			}
+		j++;
+		}
 	}
-	push_end(a, pivot_value);
-	// printf("pivot_value===================> [%d]\n", pivot_value);
-	// printf("a=");
-	// ptest(a);
-	// printf("b=");
-	// ptest(b);
-	// printf("a=");
-	// ptest(a);
-	// printf("b=");
-	// ptest(b);
-	while (b->top >= 0)
-		pa(a, b);
-	partitin(a, b, start, pivot_index - 1);
-	partitin(a, b, pivot_index + 1, end);
-	//printf("pivot_value2=%d", pivot_value);
 }
 
-void	min_max(t_stack *a, t_stack *b)
+void	ft_repleace(t_stack *a)
 {
-	int	min;
+	int	size;
+	int	*sorted;
+	int	i;
+	int	j;
+
+	size = a->size;
+	sorted = malloc(size * sizeof(int));
+	if (!sorted)
+		return ;
+	ft_presort(a, sorted);
+	i = -1;
+	while (i++ < size)
+	{
+		j = -1;
+		while (j++ < size)
+		{
+			if (a->t_stack[i] == sorted[j])
+			{
+				a->t_stack[i] = j;
+				break ;
+			}
+		}
+	}
+	free(sorted);
+}
+
+int	max_index(t_stack *a)
+{
 	int	max;
 	int	i;
-	int	min_i, max_i;
-	int	mid;
+	int	max_i;
 
 	i = 0;
-	min = 2147483647;
 	max = -2147483648;
 	while (i <= a->top)
 	{
-		if (min > a->t_stack[i])
-		{
-			min = a->t_stack[i];
-			min_i = i;
-		}
 		if (max < a->t_stack[i])
 		{
 			max = a->t_stack[i];
@@ -583,89 +599,85 @@ void	min_max(t_stack *a, t_stack *b)
 		}
 		i++;
 	}
-	mid = a->size / 2;
-	if ((abs(mid) - min_i) >=  abs((mid) - max_i))
+	return (max_i);
+}
+
+void	sort_action_01(t_stack *a, t_stack *b, int pivot)
+{
+	int	i;
+
+	i = 0;
+	while (i < a->size)
 	{
-		if (min_i >= mid)
-		{
-			while (a->t_stack[a->top] != min)
-				ra(a);
+		if (a->t_stack[a->top] < pivot)
 			pb(a, b);
+		else
+			ra(a);
+		i++;
+	}	
+}
+
+void	sort_action_02(t_stack *a, t_stack *b, int pivot)
+{
+	int	j;
+	int	i;
+
+	j = 1;
+	while (j < (pivot - 1))
+	{
+		i = 0;
+		while (i < (a->size - (j * pivot)))
+		{
+			if (a->t_stack[a->top] >= j * pivot && a->t_stack[a->top] < \
+				((j + 1) * pivot))
+				pb(a, b);
+			else
+				ra(a);
+			i++;
+		}
+		j++;
+	}	
+}
+
+void	sort_action_03(t_stack *a, t_stack *b, int pivot)
+{
+	int	max_i;
+
+	while (is_empty(b) != -1)
+	{
+		max_i = max_index(b);
+		if (b->top > pivot)
+		{
+			if (abs(max_i - b->top) < pivot)
+				rb(b);
+			else
+				rrb(b);
 		}
 		else
 		{
-			while (a->t_stack[a->top] != min)
-				rra(a);
-			pb(a, b);
+			if (abs(max_i - b->top) <= pivot / 2)
+				rb(b);
+			else
+				rrb(b);
 		}
+		if (b->t_stack[b->top] == find_max(b))
+			pa(a, b);
 	}
-	else
-	{
-		if (max_i > mid)
-		{
-			while (a->t_stack[a->top] != max)
-				ra(a);
-			pb(a, b);
-			rb(b);
-		}
-		else
-		{
-			while (a->t_stack[a->top] != max)
-				rra(a);
-			pb(a, b);
-			rb(b);
-		}
-	}
-	if (!is_sorted(a))
-		min_max(a, b);
-	else
-		while (a->top != -1)
-			pb(a, b);
-	while (b->t_stack[b->top] != max)
-		rrb(b);
-	return ;
 }
 
-void	ft_repleace(t_stack *arr, t_stack *b)
+void	ft_big_sort(t_stack *a, t_stack *b, int start, int end)
 {
-	int size = arr->size;
-	int *sorted = malloc(size * sizeof(int));
-	for (int i = 0; i < size; i++) {
-		sorted[i] = arr->t_stack[i];
-	}
-	for (int i = 0; i < size; i++) {
-		for (int j = i + 1; j < size; j++) {
-			if (sorted[i] > sorted[j]) {
-				int temp = sorted[i];
-				sorted[i] = sorted[j];
-				sorted[j] = temp;
-			}
-		}
-	}
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if (arr->t_stack[i] == sorted[j]) {
-				arr->t_stack[i] = j;
-				break;
-			}
-		}
-	}
-	free(sorted);
-}
+	int	pivot;
 
-void	quicksort(t_stack *a, t_stack *b)
-{
-	int	start;
-
-	start = 0;
-	partitin(a, b, 0, a->top);
-	// while (!is_sorted(a))
-	// 	partitin(a, b, start, a->top);
-
-	// min_max(a, b);
-	// while (b->top != -1)
-	// 	pa(a, b);
-	return ;
+	if ((end - start) <= 100)
+		pivot = (end - start) / 5;
+	else
+		pivot = (end - start) / 10;
+	sort_action_01(a, b, pivot);
+	sort_action_02(a, b, pivot);
+	while (is_empty(a) != -1)
+		pb(a, b);
+	sort_action_03(a, b, pivot);
 }
 
 void	ft_sort(t_stack *a, t_stack *b)
@@ -682,79 +694,100 @@ void	ft_sort(t_stack *a, t_stack *b)
 	else if (size == 5)
 		sort_5digit(a, b);
 	else
-		quicksort(a, b);
+	{
+		ft_repleace(a);
+		ft_big_sort(a, b, 0, a->size);
+	}
 	return ;
+}
+
+int	count_digits(char *str)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == ' ' || str[i] == '\t')
+		{
+			i++;
+			continue ;
+		}
+		if (str[i] == '+' || str[i] == '-')
+			i++;
+		if (!ft_isdigit(str[i]))
+			return (0);
+		count++;
+		while (ft_isdigit(str[i]))
+			i++;
+	}
+	return (count);
 }
 
 int	input_size(int argc, char **argv)
 {
 	int	count;
 	int	i;
-	int	j;
 
 	i = 1;
 	count = 0;
 	while (i < argc)
-	{	
-		j = 0;
-		while (argv[i][j] != '\0')
-		{
-			if (argv[i][j] == ' ' || argv[i][j] == '\t')
-			{
-				j++;
-				continue ;
-			}
-			if (argv[i][j] == '+' || argv[i][j] == '-')
-			{
-				j++;
-			}
-			if (!ft_isdigit(argv[i][j]))
-				return (0);
-			count++;
-			while (ft_isdigit(argv[i][j]))
-				j++;
-		}
-	i++;
+	{
+		count += count_digits(argv[i]);
+		i++;
 	}
 	return (count);
 }
 
-void	input_to_stack(t_stack *a, int argc, char **argv)
+int	extract_number(char **str)
+{
+	int	sign;
+	int	num;
+
+	sign = 1;
+	if (**str == '+')
+		(*str)++;
+	else if (**str == '-')
+	{
+		sign = -1;
+		(*str)++;
+	}
+	num = 0;
+	while (ft_isdigit(**str))
+	{
+		num = num * 10 + (**str - '0');
+		(*str)++;
+	}
+	return (num * sign);
+}
+
+void	process_input(t_stack *a, char *str)
+{
+	int	num;
+
+	while (*str != '\0')
+	{
+		while (*str == ' ' || *str == '\t')
+			str++;
+		if (*str == '\0')
+			break ;
+		num = extract_number(&str);
+		push(a, num);
+	}
+}
+
+void	manage_inputs(t_stack *a, int argc, char **argv)
 {
 	int	i;
-	int	j;
-	int	num;
-	int	sign;
 
-	i = 0;
-	j = 0;
-	while (++i < argc)
+	i = 1;
+	while (i < argc)
 	{
-		while (argv[i][j] != '\0')
-		{
-			if (argv[i][j] == ' ' || argv[i][j] == '\t')
-			{
-				j++;
-				continue ;
-			}
-			sign = 1;
-			if (argv[i][j] == '+')
-				j++;
-			else if (argv[i][j] == '-')
-			{
-				sign = -1;
-				j++;
-			}
-			num = 0;
-			while (ft_isdigit(argv[i][j]))
-			{
-				num = num * 10 + (argv[i][j] - '0');
-				j++;
-			}
-			push(a, num * sign);
-		}
-		j = 0;
-	}	
+		process_input(a, argv[i]);
+		i++;
+	}
 }
 
 void	ft_error(t_stack *a, t_stack *b, int print)
@@ -766,13 +799,29 @@ void	ft_error(t_stack *a, t_stack *b, int print)
 	return ;
 }
 
+int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
+{
+	init_stack(a, input_size(argc, argv));
+	init_stack(b, input_size(argc, argv));
+	manage_inputs(a, argc, argv);
+	if (is_sorted(a))
+	{
+		ft_error(a, b, 0);
+		return (0);
+	}
+	if (is_repeated(a))
+	{
+		ft_error(a, b, 1);
+		return (0);
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	t_stack	a;	
 	t_stack	b;
-	// char *my_argv[] = {"program_name", "68 19 60 89 47 2 12 92 41 49 36 11 53 72 26 95 8 71 32 45 28 9 50 33 35 99 37 25 80 88 96 30 42 22 79 87 61 90 76 38 1 20 17 44 91 59 46 69 23 83 54 15 8414 55 98 43 18 84881 16 85 24 77 70 31 1463 29 78 65 -57 10 56 97 3 67 52 39 63 75 455640 -21 58 6-544 66 82 -545451 48 73 256457 9844 4 7 62 -65434 86 -5"};
-	// argc = sizeof(my_argv) / sizeof(char *);
-	// argv = my_argv;
+
 	if (argc == 1)
 		return (0);
 	if (!input_size(argc, argv))
@@ -780,29 +829,9 @@ int	main(int argc, char **argv)
 		ft_error(&a, &b, 1);
 		return (0);
 	}
-	init_stack(&a, input_size(argc, argv));
-	init_stack(&b, input_size(argc, argv));
-	input_to_stack(&a, argc, argv);
-	if (is_sorted(&a))
-	{
-		ft_error(&a, &b, 0);
+	if (!ft_initialize(&a, &b, argc, argv))
 		return (0);
-	}
-	if (is_repeated(&a))
-	{
-		ft_error(&a, &b, 1);
-		return (0);
-	}
-		printf("a=");
-	ptest(&a);
-	ptest(&b);
-	ft_repleace(&a, &b);
-	//ft_sort(&a, &b);
-//	pa(&a, &b);
-	printf("a=");
-	ptest(&a);
-	printf("b=");
-	ptest(&b);
+	ft_sort(&a, &b);
 	free_stack(&a);
 	free_stack(&b);
 	return (1);
