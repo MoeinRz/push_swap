@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/23 20:13:09 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 01:44:21 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+// void	check_leaks(void)
+// {
+// 	system("leaks a.out");
+// }
 
 typedef struct s_stack{
 	int	*t_stack;
@@ -117,7 +122,7 @@ void	push_end(t_stack *s, int item)
 	s->t_stack[s->top] = item;
 }
 
-void	sa(t_stack *a)
+void	sa(t_stack *a, int display)
 {
 	int	temp;
 
@@ -126,10 +131,11 @@ void	sa(t_stack *a)
 	temp = a->t_stack[a->top];
 	a->t_stack[a->top] = a->t_stack[a->top - 1];
 	a->t_stack[a->top - 1] = temp;
-	printf("sa\n");
+	if (display)
+		write(1, "sa\n", 3);
 }
 
-void	sb(t_stack *b)
+void	sb(t_stack *b, int display)
 {
 	int	temp;
 
@@ -138,25 +144,28 @@ void	sb(t_stack *b)
 	temp = b->t_stack[b->top];
 	b->t_stack[b->top] = b->t_stack[b->top - 1];
 	b->t_stack[b->top - 1] = temp;
-	printf("sb\n");
+	if (display)
+		write(1, "sb\n", 3);
 }
 
-void	ss(t_stack *a, t_stack *b)
+void	ss(t_stack *a, t_stack *b, int display)
 {
-	sa(a);
-	sb(b);
-	printf("ss\n");
+	sa(a, 0);
+	sb(b, 0);
+	if (display)
+		write(1, "ss\n", 3);
 }
 
-void	pa(t_stack *a, t_stack *b)
+void	pa(t_stack *a, t_stack *b, int display)
 {
 	if (b->top == -1)
 		return ;
 	push_end(a, pop(b));
-	printf("pa\n");
+	if (display)
+		write(1, "pa\n", 3);
 }
 
-void	pb(t_stack *a, t_stack *b)
+void	pb(t_stack *a, t_stack *b, int display)
 {
 	int	temp;
 
@@ -164,10 +173,11 @@ void	pb(t_stack *a, t_stack *b)
 	if (a->top == -1)
 		return ;
 	push_end(b, pop(a));
-	printf("pb\n");
+	if (display)
+		write(1, "pb\n", 3);
 }
 
-void	ra(t_stack *a)
+void	ra(t_stack *a, int display)
 {
 	int	temp;
 	int	i;
@@ -182,10 +192,11 @@ void	ra(t_stack *a)
 		i--;
 	}
 	a->t_stack[0] = temp;
-	printf("ra\n");
+	if (display)
+		write(1, "ra\n", 3);
 }
 
-void	rb(t_stack *b)
+void	rb(t_stack *b, int display)
 {
 	int	temp;
 	int	i;
@@ -200,17 +211,19 @@ void	rb(t_stack *b)
 		i--;
 	}
 	b->t_stack[0] = temp;
-	printf("rb\n");
+	if (display)
+		write(1, "rb\n", 3);
 }
 
-void	rr(t_stack *a, t_stack *b)
+void	rr(t_stack *a, t_stack *b, int display)
 {
-	ra(a);
-	rb(b);
-	printf("rr\n");
+	ra(a, 0);
+	rb(b, 0);
+	if (display)
+		write(1, "rr\n", 3);
 }
 
-void	rra(t_stack *a)
+void	rra(t_stack *a, int display)
 {
 	int	temp;
 	int	i;
@@ -225,10 +238,11 @@ void	rra(t_stack *a)
 		i++;
 	}
 	a->t_stack[a->top] = temp;
-	printf("rra\n");
+	if (display)
+		write(1, "rra\n", 4);
 }
 
-void	rrb(t_stack *b)
+void	rrb(t_stack *b, int display)
 {
 	int	temp;
 	int	i;
@@ -243,14 +257,16 @@ void	rrb(t_stack *b)
 		i++;
 	}
 	b->t_stack[b->top] = temp;
-	printf("rrb\n");
+	if (display)
+		write(1, "rrb\n", 4);
 }
 
-void	rrr(t_stack *a, t_stack *b)
+void	rrr(t_stack *a, t_stack *b, int display)
 {
-	rra(a);
-	rrb(b);
-	printf("rrr\n");
+	rra(a, 0);
+	rrb(b, 0);
+	if (display)
+		write(1, "rrr\n", 4);
 }
 
 int	is_sorted(t_stack *a)
@@ -371,38 +387,38 @@ void	sort_3digit(t_stack *a)
 	v[2] = a->t_stack[2];
 	if ((v[2] > v[1]) && (v[2] > v[0]) && (v[1] > v[0]))
 	{
-		sa(a);
-		rra(a);
+		sa(a, 1);
+		rra(a, 1);
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[2] < v[0]))
 	{
-		rra(a);
-		sa(a);
+		rra(a, 1);
+		sa(a, 1);
 	}
 	else if ((v[0] < v[1]) && (v[1] > v[2]) && (v[0] < v[2]))
-		rra(a);
+		rra(a, 1);
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] < v[2]))
-		ra(a);
+		ra(a, 1);
 	else if ((v[1] < v[2]) && (v[1] < v[0]) && (v[0] > v[2]))
-		sa(a);
+		sa(a, 1);
 	return ;
 }
 
 void	ft_action_01(t_stack *a, t_stack *b)
 {
-	ra(a);
-	ra(a);
-	pb(a, b);
+	ra(a, 1);
+	ra(a, 1);
+	pb(a, b, 1);
 	sort_3digit(a);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	ft_action_02(t_stack *a, t_stack *b)
 {
-	rra(a);
-	pb(a, b);
+	rra(a, 1);
+	pb(a, b, 1);
 	sort_3digit(a);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	sort_4digit(t_stack *a, t_stack *b)
@@ -417,16 +433,16 @@ void	sort_4digit(t_stack *a, t_stack *b)
 	v[3] = a->t_stack[3];
 	if (v[3] == min)
 	{
-		pb(a, b);
+		pb(a, b, 1);
 		sort_3digit(a);
-		pa(a, b);
+		pa(a, b, 1);
 	}
 	else if (v[2] == min)
 	{
-		ra(a);
-		pb(a, b);
+		ra(a, 1);
+		pb(a, b, 1);
 		sort_3digit(a);
-		pa(a, b);
+		pa(a, b, 1);
 	}
 	else if (v[1] == min)
 		ft_action_01(a, b);
@@ -436,65 +452,65 @@ void	sort_4digit(t_stack *a, t_stack *b)
 
 void	ft_action_03(t_stack *a, t_stack *b)
 {
-	pb(a, b);
-	rra(a);
-	pb(a, b);
+	pb(a, b, 1);
+	rra(a, 1);
+	pb(a, b, 1);
 	sort_3digit(a);
-	pa(a, b);
-	ra(a);
-	pa(a, b);
+	pa(a, b, 1);
+	ra(a, 1);
+	pa(a, b, 1);
 }
 
 void	ft_action_04(t_stack *a, t_stack *b)
 {
-	pb(a, b);
-	rra(a);
-	pb(a, b);
+	pb(a, b, 1);
+	rra(a, 1);
+	pb(a, b, 1);
 	sort_3digit(a);
-	pa(a, b);
-	pa(a, b);
-	ra(a);
+	pa(a, b, 1);
+	pa(a, b, 1);
+	ra(a, 1);
 }
 
 void	ft_action_05(t_stack *a, t_stack *b)
 {
-	rra(a);
-	rra(a);
-	pb(a, b);
+	rra(a, 1);
+	rra(a, 1);
+	pb(a, b, 1);
 	sort_4digit(a, b);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	ft_action_06(t_stack *a, t_stack *b)
 {
-	ra(a);
-	ra(a);
-	pb(a, b);
+	ra(a, 1);
+	ra(a, 1);
+	pb(a, b, 1);
 	sort_4digit(a, b);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	ft_action_07(t_stack *a, t_stack *b)
 {
-	ra(a);
-	pb(a, b);
+	ra(a, 1);
+	pb(a, b, 1);
 	sort_4digit(a, b);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	ft_action_08(t_stack *a, t_stack *b)
 {
-	rra(a);
-	pb(a, b);
+	rra(a, 1);
+	pb(a, b, 1);
 	sort_4digit(a, b);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	ft_action_09(t_stack *a, t_stack *b)
 {
-	pb(a, b);
+	pb(a, b, 1);
 	sort_4digit(a, b);
-	pa(a, b);
+	pa(a, b, 1);
 }
 
 void	sort_5digit(t_stack *a, t_stack *b)
@@ -535,10 +551,13 @@ void	ft_presort(t_stack *a, int	*sorted)
 
 	size = a->size;
 	i = -1;
-	while (i++ < size)
+	while (++i < size)
+	{
 		sorted[i] = a->t_stack[i];
+		// i++;
+	}
 	i = -1;
-	while (i++ < size)
+	while (++i < size)
 	{
 		j = i + 1;
 		while (j < size)
@@ -551,6 +570,7 @@ void	ft_presort(t_stack *a, int	*sorted)
 			}
 		j++;
 		}
+		// i++;
 	}
 }
 
@@ -562,22 +582,24 @@ void	ft_repleace(t_stack *a)
 	int	j;
 
 	size = a->size;
-	sorted = malloc(size * sizeof(int));
+	sorted = malloc((size + 1) * sizeof(int));
 	if (!sorted)
 		return ;
 	ft_presort(a, sorted);
 	i = -1;
-	while (i++ < size)
+	while (++i < size)
 	{
 		j = -1;
-		while (j++ < size)
+		while (++j < size)
 		{
 			if (a->t_stack[i] == sorted[j])
 			{
 				a->t_stack[i] = j;
 				break ;
 			}
+			// j++;
 		}
+		// i++;
 	}
 	free(sorted);
 }
@@ -610,9 +632,9 @@ void	sort_action_01(t_stack *a, t_stack *b, int pivot)
 	while (i < a->size)
 	{
 		if (a->t_stack[a->top] < pivot)
-			pb(a, b);
+			pb(a, b, 1);
 		else
-			ra(a);
+			ra(a, 1);
 		i++;
 	}	
 }
@@ -630,9 +652,9 @@ void	sort_action_02(t_stack *a, t_stack *b, int pivot)
 		{
 			if (a->t_stack[a->top] >= j * pivot && a->t_stack[a->top] < \
 				((j + 1) * pivot))
-				pb(a, b);
+				pb(a, b, 1);
 			else
-				ra(a);
+				ra(a, 1);
 			i++;
 		}
 		j++;
@@ -649,19 +671,19 @@ void	sort_action_03(t_stack *a, t_stack *b, int pivot)
 		if (b->top > pivot)
 		{
 			if (abs(max_i - b->top) < pivot)
-				rb(b);
+				rb(b, 1);
 			else
-				rrb(b);
+				rrb(b, 1);
 		}
 		else
 		{
 			if (abs(max_i - b->top) <= pivot / 2)
-				rb(b);
+				rb(b, 1);
 			else
-				rrb(b);
+				rrb(b, 1);
 		}
 		if (b->t_stack[b->top] == find_max(b))
-			pa(a, b);
+			pa(a, b, 1);
 	}
 }
 
@@ -676,7 +698,7 @@ void	ft_big_sort(t_stack *a, t_stack *b, int start, int end)
 	sort_action_01(a, b, pivot);
 	sort_action_02(a, b, pivot);
 	while (is_empty(a) != -1)
-		pb(a, b);
+		pb(a, b, 1);
 	sort_action_03(a, b, pivot);
 }
 
@@ -686,7 +708,7 @@ void	ft_sort(t_stack *a, t_stack *b)
 
 	size = a->top + 1;
 	if (size == 2)
-		sa(a);
+		sa(a, 1);
 	else if (size == 3)
 		sort_3digit(a);
 	else if (size == 4)
@@ -794,8 +816,10 @@ void	ft_error(t_stack *a, t_stack *b, int print)
 {
 	if (print)
 		write(1, "Error\n", 6);
-	free_stack(a);
-	free_stack(b);
+	if (a->t_stack)
+		free_stack(a);
+	if (b->t_stack)
+	    free_stack(b);
 	return ;
 }
 
@@ -821,18 +845,23 @@ int	main(int argc, char **argv)
 {
 	t_stack	a;	
 	t_stack	b;
-
+	// char *my_argv[] = {"program_name", "284 584 12 -98 25 -980 56 8 120 0"};
+	// argc = sizeof(my_argv) / sizeof(char *);
+	// argv = my_argv;
 	if (argc == 1)
 		return (0);
 	if (!input_size(argc, argv))
 	{
-		ft_error(&a, &b, 1);
+		write(1, "Error\n", 6);
 		return (0);
 	}
 	if (!ft_initialize(&a, &b, argc, argv))
 		return (0);
 	ft_sort(&a, &b);
-	free_stack(&a);
-	free_stack(&b);
+	if (a.t_stack)
+		free_stack(&a);
+	if (b.t_stack)
+	    free_stack(&b);
+	// check_leaks();
 	return (1);
 }

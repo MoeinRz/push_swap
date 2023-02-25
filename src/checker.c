@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -14,21 +15,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "get_next_line.h"
 
-size_t	ft_strlen(char const *str)
-{
-	unsigned int	len;
-
-	len = 0;
-	while (str[len])
-		len++;
-	return (len);
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t len)
+size_t	ft_strlcpy(char *dest, char *src, size_t len)
 {
 	unsigned int	i;
-	unsigned int	s;
+	size_t			s;
 
 	s = ft_strlen(src);
 	i = 0;
@@ -245,7 +237,7 @@ void	push_end(t_stack *s, int item)
 	s->t_stack[s->top] = item;
 }
 
-void	sa(t_stack *a)
+void	sa(t_stack *a, int display)
 {
 	int	temp;
 
@@ -254,10 +246,11 @@ void	sa(t_stack *a)
 	temp = a->t_stack[a->top];
 	a->t_stack[a->top] = a->t_stack[a->top - 1];
 	a->t_stack[a->top - 1] = temp;
-	printf("sa\n");
+	if (display)
+		write(1, "sa\n", 3);
 }
 
-void	sb(t_stack *b)
+void	sb(t_stack *b, int display)
 {
 	int	temp;
 
@@ -266,25 +259,28 @@ void	sb(t_stack *b)
 	temp = b->t_stack[b->top];
 	b->t_stack[b->top] = b->t_stack[b->top - 1];
 	b->t_stack[b->top - 1] = temp;
-	printf("sb\n");
+	if (display)
+		write(1, "sb\n", 3);
 }
 
-void	ss(t_stack *a, t_stack *b)
+void	ss(t_stack *a, t_stack *b, int display)
 {
-	sa(a);
-	sb(b);
-	printf("ss\n");
+	sa(a, 0);
+	sb(b, 0);
+	if (display)
+		write(1, "ss\n", 3);
 }
 
-void	pa(t_stack *a, t_stack *b)
+void	pa(t_stack *a, t_stack *b, int display)
 {
 	if (b->top == -1)
 		return ;
 	push_end(a, pop(b));
-	printf("pa\n");
+	if (display)
+		write(1, "pa\n", 3);
 }
 
-void	pb(t_stack *a, t_stack *b)
+void	pb(t_stack *a, t_stack *b, int display)
 {
 	int	temp;
 
@@ -292,10 +288,11 @@ void	pb(t_stack *a, t_stack *b)
 	if (a->top == -1)
 		return ;
 	push_end(b, pop(a));
-	printf("pb\n");
+	if (display)
+		write(1, "pb\n", 3);
 }
 
-void	ra(t_stack *a)
+void	ra(t_stack *a, int display)
 {
 	int	temp;
 	int	i;
@@ -310,10 +307,11 @@ void	ra(t_stack *a)
 		i--;
 	}
 	a->t_stack[0] = temp;
-	printf("ra\n");
+	if (display)
+		write(1, "ra\n", 3);
 }
 
-void	rb(t_stack *b)
+void	rb(t_stack *b, int display)
 {
 	int	temp;
 	int	i;
@@ -328,17 +326,19 @@ void	rb(t_stack *b)
 		i--;
 	}
 	b->t_stack[0] = temp;
-	printf("rb\n");
+	if (display)
+		write(1, "rb\n", 3);
 }
 
-void	rr(t_stack *a, t_stack *b)
+void	rr(t_stack *a, t_stack *b, int display)
 {
-	ra(a);
-	rb(b);
-	printf("rr\n");
+	ra(a, 0);
+	rb(b, 0);
+	if (display)
+		write(1, "rr\n", 3);
 }
 
-void	rra(t_stack *a)
+void	rra(t_stack *a, int display)
 {
 	int	temp;
 	int	i;
@@ -353,10 +353,11 @@ void	rra(t_stack *a)
 		i++;
 	}
 	a->t_stack[a->top] = temp;
-	printf("rra\n");
+	if (display)
+		write(1, "rra\n", 4);
 }
 
-void	rrb(t_stack *b)
+void	rrb(t_stack *b, int display)
 {
 	int	temp;
 	int	i;
@@ -371,14 +372,16 @@ void	rrb(t_stack *b)
 		i++;
 	}
 	b->t_stack[b->top] = temp;
-	printf("rrb\n");
+	if (display)
+		write(1, "rrb\n", 4);
 }
 
-void	rrr(t_stack *a, t_stack *b)
+void	rrr(t_stack *a, t_stack *b, int display)
 {
-	rra(a);
-	rrb(b);
-	printf("rrr\n");
+	rra(a, 0);
+	rrb(b, 0);
+	if (display)
+		write(1, "rrr\n", 4);
 }
 
 int	is_sorted(t_stack *a)
@@ -498,7 +501,7 @@ int	input_size(int argc, char **argv)
 	return (count);
 }
 
-int	extract_number(char **str)
+int	extract_number(char **str, int *error)
 {
 	int	sign;
 	int	num;
@@ -517,32 +520,44 @@ int	extract_number(char **str)
 		num = num * 10 + (**str - '0');
 		(*str)++;
 	}
+	// if (**str != '\0' && !ft_isdigit(**str))
+	// {
+	// 	*error = 0;
+	// 	printf("error\n");
+
+	// }
 	return (num * sign);
 }
 
-void	process_input(t_stack *a, char *str)
+int	process_input(t_stack *a, char *str)
 {
 	int	num;
+	int	error;
 
+	error = 0;
 	while (*str != '\0')
 	{
 		while (*str == ' ' || *str == '\t')
 			str++;
 		if (*str == '\0')
 			break ;
-		num = extract_number(&str);
+		num = extract_number(&str, &error);
+			if (error)
+				return (0);
 		push(a, num);
 	}
+	return (1);
 }
 
-void	manage_inputs(t_stack *a, int argc, char **argv)
+int	manage_inputs(t_stack *a, int argc, char **argv)
 {
 	int	i;
 
 	i = 1;
 	while (i < argc)
 	{
-		process_input(a, argv[i]);
+		if (!process_input(a, argv[i]))
+			return (0);
 		i++;
 	}
 }
@@ -560,7 +575,11 @@ int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
 {
 	init_stack(a, input_size(2, argv));
 	init_stack(b, input_size(2, argv));
-	manage_inputs(a, 2, argv);
+	if (!manage_inputs(a, 2, argv))
+	{
+		ft_error(a, b, 1);
+		return (0);
+	}
 	if (is_sorted(a))
 	{
 		ft_error(a, b, 0);
@@ -576,29 +595,42 @@ int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
 
 int	do_operating(t_stack *a, t_stack *b, char *op)
 {
-	if (strcmp(op, "sa") == 0)
-		sa(a);
-	else if (strcmp(op, "sb") == 0)
-		sb(b);
-	else if (strcmp(op, "ss") == 0)
-		ss(a, b);
-	else if (strcmp(op, "ra") == 0)
-		ra(a);
-	else if (strcmp(op, "rra") == 0)
-		rra(a);
-	else if (strcmp(op, "rb") == 0)
-		rb(b);
-	else if (strcmp(op, "rrb") == 0)
-		rrb(b);
-	else if (strcmp(op, "rr") == 0)
-		rr(a, b);
-	else if (strcmp(op, "rrr") == 0)
-		rrr(a, b);
-	else if (strcmp(op, "pa") == 0)
-		pa(a, b);
-	else if (strcmp(op, "pb") == 0)
-		pb(a, b);
+	if (strcmp(op, "sa\n") == 0)
+		sa(a, 0);
+	else if (strcmp(op, "sb\n") == 0)
+		sb(b, 0);
+	else if (strcmp(op, "ss\n") == 0)
+		ss(a, b, 0);
+	else if (strcmp(op, "ra\n") == 0)
+		ra(a, 0);
+	else if (strcmp(op, "rra\n") == 0)
+		rra(a, 0);
+	else if (strcmp(op, "rb\n") == 0)
+		rb(b, 0);
+	else if (strcmp(op, "rrb\n") == 0)
+		rrb(b, 0);
+	else if (strcmp(op, "rr\n") == 0)
+		rr(a, b, 0);
+	else if (strcmp(op, "rrr\n") == 0)
+		rrr(a, b, 0);
+	else if (strcmp(op, "pa\n") == 0)
+		pa(a, b, 0);
+	else if (strcmp(op, "pb\n") == 0)
+		pb(a, b, 0);
 	return (1);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
 }
 
 int	main(int argc, char **argv)
@@ -606,30 +638,33 @@ int	main(int argc, char **argv)
 	t_stack	a;	
 	t_stack	b;
 	char	**split;
-	char	**op;
+	char	*line;
 	int		i;
 
 	i = 0;
-	char *my_argv[] = {"program_name", "68 19 60 89", "ra pb rra sa pa"};
-	argc = sizeof(my_argv) / sizeof(char *);
-	argv = my_argv;
-	if (argc != 3)
+	if (argc != 2)
 	{
 		write(1, "Error\n", 6);
 		return (0);
 	}
 	if (!input_size(2, argv))
 	{
-		ft_error(&a, &b, 1);
+		write(1, "Error\n", 6);
 		return (0);
 	}
-	if (!ft_initialize(&a, &b, 2, argv))
+	if (!ft_initialize(&a, &b, argc, argv))
 		return (0);
-	op = ft_split(argv[2], ' ');
-	while (*op)
+	while ((line = get_next_line(STDIN_FILENO)))
 	{
-		do_operating(&a, &b, *op);
-		op++;
+		split = ft_split(line, ' ');
+		i = 0;
+		while (split[i])
+		{
+			do_operating(&a, &b, split[i]);
+			i++;
+		}
+		free(line);
+		free_split(split);
 	}
 	if (is_sorted(&a))
 		write(1, "OK\n", 3);
@@ -639,33 +674,3 @@ int	main(int argc, char **argv)
 	free_stack(&b);
 	return (1);
 }
-
-// Split the input argument into separate integers
-// split = ft_split(argv[1], ' ');
-// op = ft_split(argv[2], ' ');
-
-// init_stack(&a, argc - 1);
-// init_stack(&b, argc - 1);
-
-// i = 0;
-// while (split[i])
-// {
-// 	push(&a, atoi(split[i]));
-// 	i++;
-// }
-
-// ptest(&a);
-// Free the memory allocated for the split array
-// i = 0;
-// while (split[i])
-// {
-// 	free(split[i]);
-// 	i++;
-// }
-// free(split);
-
-// free_stack(&a);
-// free_stack(&b);
-
-// return (0);
-// }
