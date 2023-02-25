@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:39:55 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:30:15 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/26 00:33:29 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int		extract_number(char **str);
 void	process_input(t_stack *a, char *str);
 void	manage_inputs(t_stack *a, int argc, char **argv);
 void	ft_error(t_stack *a, t_stack *b, int print);
-int		ft_initialize_ch(t_stack *a, t_stack *b, char **argv);
+int		ft_initialize_ch(t_stack *a, t_stack *b, int argc, char **argv);
 int		ft_initialize(t_stack *a, t_stack *b, int argc, char **argv);
 
 #endif

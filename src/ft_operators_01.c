@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_operators_01.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:39:46 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 19:04:43 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 22:56:56 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,6 @@ void	pa(t_stack *a, t_stack *b, int display)
 //===========================================================================//
 void	pb(t_stack *a, t_stack *b, int display)
 {
-	int	temp;
-
-	temp = 0;
 	if (a->top == -1)
 		return ;
 	push_end(b, pop(a));

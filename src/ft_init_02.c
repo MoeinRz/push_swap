@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init_02.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:52:24 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:53:21 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 23:41:39 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	input_size(int argc, char **argv)
 //===========================================================================//
 int	extract_number(char **str)
 {
-	int	sign;
-	int	num;
+	int		sign;
+	long	num;
 
 	sign = 1;
 	if (**str == '+')
@@ -80,7 +80,11 @@ int	extract_number(char **str)
 		num = num * 10 + (**str - '0');
 		(*str)++;
 	}
-	return (num * sign);
+	num = num * sign;
+	if (num <= 2147483647 && num >= -2147483648)
+		return (num);
+	write(1, "Error\n", 6);
+	exit(1);
 }
 
 //===========================================================================//

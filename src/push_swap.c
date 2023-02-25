@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 19:38:14 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/26 00:53:34 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,19 @@ int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
 	init_stack(a, input_size(argc, argv));
 	init_stack(b, input_size(argc, argv));
 	manage_inputs(a, argc, argv);
-	if (is_sorted(a))
-	{
-		ft_error(a, b, 0);
-		return (0);
-	}
+	if (a->size == 1)
+		return (1);
 	if (is_repeated(a))
 	{
 		ft_error(a, b, 1);
-		return (0);
+		return (1);
 	}
-	return (1);
+	if (is_sorted(a))
+	{
+		ft_error(a, b, 0);
+		return (1);
+	}
+	return (0);
 }
 
 //===========================================================================//
@@ -66,18 +68,15 @@ int	main(int argc, char **argv)
 	t_stack	b;
 
 	if (argc == 1)
-		return (0);
-	if (!input_size(argc, argv))
-	{
-		write(1, "Error\n", 6);
-		return (0);
-	}
-	if (!ft_initialize(&a, &b, argc, argv))
-		return (0);
+		return (1);
+	if (input_size(argc, argv) == 1)
+		return (1);
+	if (ft_initialize(&a, &b, argc, argv) == 1)
+		return (1);
 	ft_sort(&a, &b);
 	if (a.t_stack)
 		free_stack(&a);
 	if (b.t_stack)
 		free_stack(&b);
-	return (1);
+	return (0);
 }

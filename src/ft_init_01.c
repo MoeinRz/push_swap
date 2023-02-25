@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init_01.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:36:04 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:55:10 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 23:13:07 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 void	init_stack(t_stack *s, int size)
 {
 	s->t_stack = (int *)malloc(size * sizeof(int));
+	if (s->t_stack == NULL)
+	{
+		write(1, "Error\n", 6);
+		exit(1);
+	}
 	s->top = -1;
 	s->size = size;
 }

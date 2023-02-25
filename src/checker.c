@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
+/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 20:18:59 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 19:02:26 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/26 00:32:15 by moein            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,22 @@
 //===========================================================================//
 //initializing for inputs                                                    //
 //===========================================================================//
-int	ft_initialize_ch(t_stack *a, t_stack *b, char **argv)
+int	ft_initialize_ch(t_stack *a, t_stack *b, int argc, char **argv)
 {
-	init_stack(a, input_size(2, argv));
-	init_stack(b, input_size(2, argv));
-	manage_inputs(a, 2, argv);
-	if (is_sorted(a))
-	{
-		ft_error(a, b, 0);
-		return (0);
-	}
+	init_stack(a, input_size(argc, argv));
+	init_stack(b, input_size(argc, argv));
+	manage_inputs(a, argc, argv);
+	// if (is_sorted(a))
+	// {
+	// 	ft_error(a, b, 0);
+	// 	return (1);
+	// }
 	if (is_repeated(a))
 	{
 		ft_error(a, b, 1);
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 //===========================================================================//
@@ -61,8 +61,8 @@ int	do_operating(t_stack *a, t_stack *b, char *op)
 	else if (ft_strncmp(op, "pb\n", 3) == 0)
 		pb(a, b, 0);
 	else
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
 //===========================================================================//
@@ -80,13 +80,13 @@ int	process_input_ch(t_stack *a, t_stack *b)
 		split = ft_split(line, ' ');
 		i = -1;
 		while (split[++i])
-			if (do_operating(a, b, split[i]) == 0)
-				return (0);
+			if (do_operating(a, b, split[i]) == 1)
+				return (1);
 		free(line);
 		free_split(split);
 		line = get_next_line(STDIN_FILENO);
 	}
-	return (1);
+	return (0);
 }
 
 //===========================================================================//
@@ -97,22 +97,22 @@ int	main(int argc, char **argv)
 	t_stack	a;	
 	t_stack	b;
 
-	if (argc != 2 || !input_size(2, argv))
+	if (argc < 2 || !input_size(2, argv))
 	{
 		write(1, "Error\n", 6);
-		return (0);
+		return (1);
 	}
-	if (!ft_initialize_ch(&a, &b, argv))
-		return (0);
-	if (!process_input_ch(&a, &b))
+	if (ft_initialize_ch(&a, &b, argc, argv) == 1)
+		return (1);
+	if (process_input_ch(&a, &b) == 1)
 	{
 		ft_error(&a, &b, 1);
-		return (0);
+		return (1);
 	}
 	if (is_sorted(&a))
 		write(1, "OK\n", 3);
 	else
 		write(1, "KO\n", 3);
 	ft_error(&a, &b, 0);
-	return (1);
+	return (0);
 }
