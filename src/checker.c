@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 20:18:59 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:56:54 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 19:02:26 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,15 @@ int	do_operating(t_stack *a, t_stack *b, char *op)
 		pa(a, b, 0);
 	else if (ft_strncmp(op, "pb\n", 3) == 0)
 		pb(a, b, 0);
+	else
+		return (0);
 	return (1);
 }
 
 //===========================================================================//
 //receive the input and processing them                                      //
 //===========================================================================//
-void	process_input_ch(t_stack *a, t_stack *b)
+int	process_input_ch(t_stack *a, t_stack *b)
 {
 	char	**split;
 	char	*line;
@@ -78,11 +80,13 @@ void	process_input_ch(t_stack *a, t_stack *b)
 		split = ft_split(line, ' ');
 		i = -1;
 		while (split[++i])
-			do_operating(a, b, split[i]);
+			if (do_operating(a, b, split[i]) == 0)
+				return (0);
 		free(line);
 		free_split(split);
 		line = get_next_line(STDIN_FILENO);
 	}
+	return (1);
 }
 
 //===========================================================================//
@@ -100,7 +104,11 @@ int	main(int argc, char **argv)
 	}
 	if (!ft_initialize_ch(&a, &b, argv))
 		return (0);
-	process_input_ch(&a, &b);
+	if (!process_input_ch(&a, &b))
+	{
+		ft_error(&a, &b, 1);
+		return (0);
+	}
 	if (is_sorted(&a))
 		write(1, "OK\n", 3);
 	else
