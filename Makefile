@@ -6,49 +6,47 @@
 #    By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/11 10:46:04 by mrezaei           #+#    #+#              #
-#    Updated: 2023/01/31 20:35:36 by mrezaei          ###   ########.fr        #
+#    Updated: 2023/02/25 18:29:15 by mrezaei          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 			=	push_swap.a
-CC				=	cc
-FLAGS			=	-Wall -Wextra -Werror
-INCLUDES		=	./include
-OBJ				=	$(SRC:.c=.o)
-SRC 			=	$(shell find . -name "ft_print_hex.c" -o -name "ft_print_ptr.c"\
-					-o -name "ft_print_u.c" -o -name "ft_printf.c" -o -name "ft_uitoa.c" \
-					-o -name "ft_str.c" -o -name "ft_isalnum.c" -o -name "ft_strtrim.c"\
-					-o -name "ft_isprint.c" -o -name "ft_memcmp.c" -o -name "ft_putchar_fd.c" \
-					-o -name "ft_split.c" -o -name "ft_strlcat.c" -o -name "ft_strncmp.c" \
-					-o -name "ft_substr.c" -o -name "ft_atoi.c" -o -name "ft_isalpha.c" \
-					-o -name "ft_itoa.c" -o -name "ft_memcpy.c" -o -name "ft_putendl_fd.c" \
-					-o -name "ft_strchr.c" -o -name "ft_strlcpy.c" -o -name "ft_strnstr.c" \
-					-o -name "ft_tolower.c" -o -name "ft_bzero.c" -o -name "ft_isascii.c" \
-					-o -name "ft_memccpy.c" -o -name "ft_memmove.c" -o -name "ft_putnbr_fd.c" \
-					-o -name "ft_strdup.c" -o -name "ft_strlen.c" -o -name "ft_strrchr.c" \
-					-o -name "ft_toupper.c" -o -name "ft_calloc.c" -o -name "ft_isdigit.c" \
-					-o -name "ft_memchr.c" -o -name "ft_memset.c" -o -name "ft_putstr_fd.c" \
-					-o -name "ft_strjoin.c" -o -name "ft_strmapi.c" -o -name "ft_lstlast.c" \
-					-o -name "ft_lstadd_back.c" -o -name "ft_lstadd_front.c" -o -name "ft_lstclear.c" \
-					-o -name "ft_lstdelone.c" -o -name "ft_lstiter.c" -o -name "ft_lstmap.c" \
-					-o -name "ft_lstnew.c" -o -name "ft_lstsize.c" -type f)
+NAME        = push_swap
+NAME_Bonus  = checker
+CC          = cc
+FLAGS       = -Wall -Wextra -Werror
+INCLUDES    = ./include/
+SRC         = $(shell find ./src -name "ft_lib.c" -o -name "ft_min_max.c"\
+				-o -name "ft_operators_??.c" -o -name "ft_pop_push.c"\
+				-o -name "ft_presort.c" -o -name "ft_sort_?digit.c"\
+				-o -name "ft_sort_big.c" -o -name "ft_split.c"\
+				-o -name "get_next_line.c" -o -name "get_next_line_utils.c"\
+				-o -name "ft_init_??.c" -o -name "push_swap.c" -type f)
+OBJ         = $(SRC:.c=.o)
+SRC_Bonus   = $(shell find ./src -name "ft_lib.c" -o -name "ft_min_max.c"\
+				-o -name "ft_operators_??.c" -o -name "ft_pop_push.c"\
+				-o -name "ft_presort.c" -o -name "ft_sort_?digit.c"\
+				-o -name "ft_sort_big.c" -o -name "ft_split.c"\
+				-o -name "get_next_line.c" -o -name "get_next_line_utils.c"\
+				-o -name "ft_init_??.c" -o -name "checker.c" -type f)
+OBJ_Bonus   = $(SRC_Bonus:.c=.o)
 
 all: $(NAME)
+bonus: $(NAME_Bonus)
 %.o: %.c
 	$(CC) $(FLAGS) -I$(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ)
-	make -C ./libft
-	ar rc $(NAME) $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
 
+$(NAME_Bonus): $(OBJ_Bonus)
+	$(CC) $(OBJ_Bonus) -o $(NAME_Bonus)
+	
 clean:
-	make -C ./libft clean
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJ_Bonus)
 
 fclean: clean
-	make -C ./libft fclean
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAME_Bonus)
 
 re: fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re bonus
