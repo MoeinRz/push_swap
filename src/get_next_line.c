@@ -6,11 +6,11 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 16:25:03 by mrezaei           #+#    #+#             */
-/*   Updated: 2022/12/11 18:38:38 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 17:11:15 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../include/push_swap.h"
 
 //===========================================================================//
 //find the next line                                                         //
@@ -113,45 +113,3 @@ char	*get_next_line(int fd)
 	else
 		return (free(str), str = NULL, NULL);
 }
-
-//===========================================================================//
-//main for test => gcc -Wall -Werror -Wextra -D BUFFER_SIZE=100 
-//get_next_line.c get_next_line_utils.c && ./a.out
-//===========================================================================//
-// # include <stdlib.h>
-// # include <sys/types.h>
-// # include <sys/uio.h>
-// # include <unistd.h>
-// #include <sys/stat.h>
-// #include <fcntl.h>
-// #include <stdio.h>
-
-// int	main(void)
-// {
-// 	char	*line;
-// 	int		i;
-// 	int		fd1;
-// 	int		fd2;
-// 	int		fd3;
-// 	fd1 = open("big.txt", O_RDONLY);
-// 	fd2 = open("test2.txt", O_RDONLY);
-// 	fd3 = open("test3.txt", O_RDONLY);
-// 	i = 1;
-// 	while (i < 7)
-// 	{
-// 		line = get_next_line(fd1);
-// 		printf("line [%02d]: %s", i, line);
-// 		free(line);
-// 		line = get_next_line(fd2);
-// 		printf("line [%02d]: %s", i, line);
-// 		free(line);
-// 		line = get_next_line(fd3);
-// 		printf("line [%02d]: %s\n", i, line);
-// 		free(line);
-// 		i++;
-// 	}
-// 	close(fd1);
-// 	close(fd2);
-// 	close(fd3);
-// 	return (0);
-// }
