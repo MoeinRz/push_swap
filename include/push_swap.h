@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:39:55 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 17:23:14 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 18:30:15 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*get_next_line(int fd);
 char	*ft_read_file(int fd, char *str);
 char	*ft_first_line(char *str);
 char	*ft_goto_next(char *str);
-
 void	init_stack(t_stack *s, int size);
 void	free_stack(t_stack *s);
 int		is_empty(t_stack *s);

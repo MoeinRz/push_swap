@@ -6,12 +6,15 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:52:24 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 12:08:41 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 18:53:21 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
+//===========================================================================//
+//count the number of inputs                                                 //
+//===========================================================================//
 int	count_digits(char *str)
 {
 	int	count;
@@ -37,6 +40,9 @@ int	count_digits(char *str)
 	return (count);
 }
 
+//===========================================================================//
+//find the size of inputs for init                                           //
+//===========================================================================//
 int	input_size(int argc, char **argv)
 {
 	int	count;
@@ -52,6 +58,9 @@ int	input_size(int argc, char **argv)
 	return (count);
 }
 
+//===========================================================================//
+//it is atoi                                                                 //
+//===========================================================================//
 int	extract_number(char **str)
 {
 	int	sign;
@@ -74,6 +83,9 @@ int	extract_number(char **str)
 	return (num * sign);
 }
 
+//===========================================================================//
+//split the space in input and push the numbers to a                         //
+//===========================================================================//
 void	process_input(t_stack *a, char *str)
 {
 	int	num;
@@ -89,6 +101,9 @@ void	process_input(t_stack *a, char *str)
 	}
 }
 
+//===========================================================================//
+//start the processing inputs                                                //
+//===========================================================================//
 void	manage_inputs(t_stack *a, int argc, char **argv)
 {
 	int	i;

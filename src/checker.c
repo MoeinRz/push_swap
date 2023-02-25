@@ -6,12 +6,15 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 20:18:59 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 17:12:51 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 18:56:54 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
+//===========================================================================//
+//initializing for inputs                                                    //
+//===========================================================================//
 int	ft_initialize_ch(t_stack *a, t_stack *b, char **argv)
 {
 	init_stack(a, input_size(2, argv));
@@ -30,6 +33,9 @@ int	ft_initialize_ch(t_stack *a, t_stack *b, char **argv)
 	return (1);
 }
 
+//===========================================================================//
+//operating                                                                  //
+//===========================================================================//
 int	do_operating(t_stack *a, t_stack *b, char *op)
 {
 	if (ft_strncmp(op, "sa\n", 3) == 0)
@@ -57,6 +63,9 @@ int	do_operating(t_stack *a, t_stack *b, char *op)
 	return (1);
 }
 
+//===========================================================================//
+//receive the input and processing them                                      //
+//===========================================================================//
 void	process_input_ch(t_stack *a, t_stack *b)
 {
 	char	**split;
@@ -76,6 +85,9 @@ void	process_input_ch(t_stack *a, t_stack *b)
 	}
 }
 
+//===========================================================================//
+//main                                                                       //
+//===========================================================================//
 int	main(int argc, char **argv)
 {
 	t_stack	a;	

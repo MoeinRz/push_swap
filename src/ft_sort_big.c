@@ -6,12 +6,15 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:49:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 12:08:17 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 18:38:23 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
+//===========================================================================//
+//devide the inputs 1/4                                                      //
+//===========================================================================//
 void	sort_action_01(t_stack *a, t_stack *b, int pivot)
 {
 	int	i;
@@ -27,6 +30,9 @@ void	sort_action_01(t_stack *a, t_stack *b, int pivot)
 	}	
 }
 
+//===========================================================================//
+//devide the inputs 3/4                                                      //
+//===========================================================================//
 void	sort_action_02(t_stack *a, t_stack *b, int pivot)
 {
 	int	j;
@@ -49,6 +55,9 @@ void	sort_action_02(t_stack *a, t_stack *b, int pivot)
 	}	
 }
 
+//===========================================================================//
+//sorting                                                                    //
+//===========================================================================//
 void	sort_action_03(t_stack *a, t_stack *b, int pivot)
 {
 	int	max_i;
@@ -75,6 +84,9 @@ void	sort_action_03(t_stack *a, t_stack *b, int pivot)
 	}
 }
 
+//===========================================================================//
+//the algorithm for the big number of inputs                                 //
+//===========================================================================//
 void	ft_big_sort(t_stack *a, t_stack *b, int start, int end)
 {
 	int	pivot;

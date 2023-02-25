@@ -6,7 +6,7 @@
 #    By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/11 10:46:04 by mrezaei           #+#    #+#              #
-#    Updated: 2023/02/25 18:17:39 by mrezaei          ###   ########.fr        #
+#    Updated: 2023/02/25 18:29:15 by mrezaei          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ $(NAME): $(OBJ)
 
 $(NAME_Bonus): $(OBJ_Bonus)
 	$(CC) $(OBJ_Bonus) -o $(NAME_Bonus)
+	
 clean:
 	rm -f $(OBJ) $(OBJ_Bonus)
 

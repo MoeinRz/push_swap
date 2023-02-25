@@ -6,12 +6,15 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 15:57:33 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/02/25 18:34:29 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
+//===========================================================================//
+//decide about selecting algorithm                                           //
+//===========================================================================//
 void	ft_sort(t_stack *a, t_stack *b)
 {
 	int	size;
@@ -33,6 +36,9 @@ void	ft_sort(t_stack *a, t_stack *b)
 	return ;
 }
 
+//===========================================================================//
+//initializeing the inputs                                                   //
+//===========================================================================//
 int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
 {
 	init_stack(a, input_size(argc, argv));
@@ -51,6 +57,9 @@ int	ft_initialize(t_stack *a, t_stack *b, int argc, char **argv)
 	return (1);
 }
 
+//===========================================================================//
+//main file                                                                  //
+//===========================================================================//
 int	main(int argc, char **argv)
 {
 	t_stack	a;	
