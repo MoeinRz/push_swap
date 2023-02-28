@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moein <moein@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 20:18:59 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/26 00:32:15 by moein            ###   ########.fr       */
+/*   Updated: 2023/02/28 15:21:00 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@ int	ft_initialize_ch(t_stack *a, t_stack *b, int argc, char **argv)
 	init_stack(a, input_size(argc, argv));
 	init_stack(b, input_size(argc, argv));
 	manage_inputs(a, argc, argv);
-	// if (is_sorted(a))
-	// {
-	// 	ft_error(a, b, 0);
-	// 	return (1);
-	// }
 	if (is_repeated(a))
 	{
 		ft_error(a, b, 1);
