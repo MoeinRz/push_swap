@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:40:21 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:47:02 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/03/03 12:58:11 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ra(t_stack *a, int display)
 		i--;
 	}
 	a->t_stack[0] = temp;
+	a->count++;
 	if (display)
 		write(1, "ra\n", 3);
 }
@@ -52,6 +53,7 @@ void	rb(t_stack *b, int display)
 		i--;
 	}
 	b->t_stack[0] = temp;
+	b->count++;
 	if (display)
 		write(1, "rb\n", 3);
 }
@@ -63,6 +65,7 @@ void	rr(t_stack *a, t_stack *b, int display)
 {
 	ra(a, 0);
 	rb(b, 0);
+	b->count--;
 	if (display)
 		write(1, "rr\n", 3);
 }
@@ -85,6 +88,7 @@ void	rra(t_stack *a, int display)
 		i++;
 	}
 	a->t_stack[a->top] = temp;
+	a->count++;
 	if (display)
 		write(1, "rra\n", 4);
 }
@@ -107,6 +111,7 @@ void	rrb(t_stack *b, int display)
 		i++;
 	}
 	b->t_stack[b->top] = temp;
+	b->count++;
 	if (display)
 		write(1, "rrb\n", 4);
 }

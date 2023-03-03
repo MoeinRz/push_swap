@@ -6,11 +6,39 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:26:32 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/28 15:23:45 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/03/03 20:01:55 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
+
+//===========================================================================//
+//the algorithm for the big number of inputs                                 //
+//===========================================================================//
+void	ft_big_sort(t_stack *a, t_stack *b, int start, int end)
+{
+	int		pivot;
+	int		i;
+	int		j;
+
+	if ((end - start) > 500)
+		i = 19;
+	else if ((end - start) < 100)
+		i = 5;
+	else
+		i = adaptive_pivot(a, b, start, end);
+	pivot = (end - start) / i;
+	sort_action_01(a, b, pivot, 1);
+	j = 0;
+	while (j < (i - 2))
+	{
+		push_part_1(a, b, pivot, j);
+		j = j + 2;
+	}
+	while (is_empty(a) != -1)
+		pb(a, b, 1);
+	check_case(a, b, pivot, 1);
+}
 
 //===========================================================================//
 //decide about selecting algorithm                                           //
@@ -78,5 +106,6 @@ int	main(int argc, char **argv)
 		free_stack(&a);
 	if (b.t_stack)
 		free_stack(&b);
+	// system("leaks push_swap");
 	return (0);
 }

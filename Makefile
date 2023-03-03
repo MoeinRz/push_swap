@@ -6,7 +6,7 @@
 #    By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/11 10:46:04 by mrezaei           #+#    #+#              #
-#    Updated: 2023/02/25 18:29:15 by mrezaei          ###   ########.fr        #
+#    Updated: 2023/03/03 17:18:16 by mrezaei          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,15 +19,17 @@ SRC         = $(shell find ./src -name "ft_lib.c" -o -name "ft_min_max.c"\
 				-o -name "ft_operators_??.c" -o -name "ft_pop_push.c"\
 				-o -name "ft_presort.c" -o -name "ft_sort_?digit.c"\
 				-o -name "ft_sort_big.c" -o -name "ft_split.c"\
-				-o -name "get_next_line.c" -o -name "get_next_line_utils.c"\
-				-o -name "ft_init_??.c" -o -name "push_swap.c" -type f)
+				-o -name "get_next_line_bonus.c" -o -name "get_next_line_utils_bonus.c"\
+				-o -name "ft_init_??.c" -o -name "ft_sort_big_utils_0?.c"\
+				-o -name "push_swap.c" -type f)
 OBJ         = $(SRC:.c=.o)
 SRC_Bonus   = $(shell find ./src -name "ft_lib.c" -o -name "ft_min_max.c"\
 				-o -name "ft_operators_??.c" -o -name "ft_pop_push.c"\
 				-o -name "ft_presort.c" -o -name "ft_sort_?digit.c"\
 				-o -name "ft_sort_big.c" -o -name "ft_split.c"\
-				-o -name "get_next_line.c" -o -name "get_next_line_utils.c"\
-				-o -name "ft_init_??.c" -o -name "checker.c" -type f)
+				-o -name "get_next_line_bonus.c" -o -name "get_next_line_utils_bonus.c"\
+				-o -name "ft_init_??.c" -o -name "ft_sort_big_utils_0?.c"\
+				-o -name "checker_bonus.c" -type f)
 OBJ_Bonus   = $(SRC_Bonus:.c=.o)
 
 all: $(NAME)

@@ -6,98 +6,131 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:49:06 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:38:23 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/03/03 17:52:24 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/push_swap.h"
 
 //===========================================================================//
-//devide the inputs 1/4                                                      //
+//just doing some actions                                                    //
 //===========================================================================//
-void	sort_action_01(t_stack *a, t_stack *b, int pivot)
+void	sub_check_case_02(t_stack *a, t_stack *b, int select, int display)
 {
-	int	i;
-
-	i = 0;
-	while (i < a->size)
+	if (select == 2)
 	{
-		if (a->t_stack[a->top] < pivot)
-			pb(a, b, 1);
-		else
-			ra(a, 1);
-		i++;
-	}	
-}
-
-//===========================================================================//
-//devide the inputs 3/4                                                      //
-//===========================================================================//
-void	sort_action_02(t_stack *a, t_stack *b, int pivot)
-{
-	int	j;
-	int	i;
-
-	j = 1;
-	while (j < (pivot - 1))
+		rrb(b, display);
+		rrb(b, display);
+		pa(a, b, display);
+	}
+	if (select == 1)
 	{
-		i = 0;
-		while (i < (a->size - (j * pivot)))
-		{
-			if (a->t_stack[a->top] >= j * pivot && a->t_stack[a->top] < \
-				((j + 1) * pivot))
-				pb(a, b, 1);
-			else
-				ra(a, 1);
-			i++;
-		}
-		j++;
-	}	
-}
-
-//===========================================================================//
-//sorting                                                                    //
-//===========================================================================//
-void	sort_action_03(t_stack *a, t_stack *b, int pivot)
-{
-	int	max_i;
-
-	while (is_empty(b) != -1)
+		rrb(b, display);
+		pa(a, b, display);
+	}
+	if (select == 3)
 	{
-		max_i = max_index(b);
-		if (b->top > pivot)
-		{
-			if (abs(max_i - b->top) < pivot)
-				rb(b, 1);
-			else
-				rrb(b, 1);
-		}
-		else
-		{
-			if (abs(max_i - b->top) <= pivot / 2)
-				rb(b, 1);
-			else
-				rrb(b, 1);
-		}
-		if (b->t_stack[b->top] == find_max(b))
-			pa(a, b, 1);
+		rb(b, display);
+		pa(a, b, display);
 	}
 }
 
 //===========================================================================//
-//the algorithm for the big number of inputs                                 //
+//check special case to find short way                                       //
 //===========================================================================//
-void	ft_big_sort(t_stack *a, t_stack *b, int start, int end)
+void	check_case(t_stack *a, t_stack *b, int pivot, int display)
 {
-	int	pivot;
+	while (is_empty(b) != -1)
+	{
+		if (b->t_stack[b->top] == find_max(b))
+		{
+			pa(a, b, display);
+			continue ;
+		}
+		if (b->t_stack[0] == find_max(b))
+		{
+			sub_check_case_02(a, b, 1, display);
+			continue ;
+		}
+		if (b->t_stack[b->top - 1] == find_max(b))
+		{
+			sub_check_case_02(a, b, 3, display);
+			continue ;
+		}
+		if (b->t_stack[1] == find_max(b))
+		{
+			sub_check_case_02(a, b, 2, display);
+			continue ;
+		}
+		else
+			sub_check_case_01(a, b, pivot, display);
+	}
+}
 
-	if ((end - start) <= 100)
-		pivot = (end - start) / 5;
-	else
-		pivot = (end - start) / 10;
-	sort_action_01(a, b, pivot);
-	sort_action_02(a, b, pivot);
-	while (is_empty(a) != -1)
-		pb(a, b, 1);
-	sort_action_03(a, b, pivot);
+//===========================================================================//
+//make a copy of stack                                                       //
+//===========================================================================//
+void	copy_stack(t_stack *a, t_stack *c)
+{
+	int	j;
+
+	j = 0;
+	while (j < a->size)
+	{
+		c->top++;
+		c->t_stack[j] = a->t_stack[j];
+		j++;
+	}
+}
+
+//===========================================================================//
+//process to check is the pivot optimal or not                               //
+//===========================================================================//
+int	solve_action(t_stack *c, t_stack *b, int pivot, int i)
+{
+	int	j;
+
+	j = 0;
+	sort_action_01(c, b, pivot, 0);
+	while (j < (i - 2))
+	{
+		push_part_0(c, b, pivot, j);
+		j = j + 2;
+	}
+	while (is_empty(c) != -1)
+		pb(c, b, 0);
+	check_case(c, b, pivot, 0);
+	return (c->count + b->count);
+}
+
+//===========================================================================//
+//find the optimal pivot                                                     //
+//===========================================================================//
+int	adaptive_pivot(t_stack *a, t_stack *b, int start, int end)
+{
+	t_stack	c;
+	int		i;
+	int		count;
+
+	i = 5;
+	while (1)
+	{
+		init_stack(&c, a->size);
+		copy_stack(a, &c);
+		count = solve_action(&c, b, (end - start) / i, i);
+		if ((end - start) > 100 && (end - start) <= 500 && count <= 5500)
+			break ;
+		if ((end - start) <= 100 && count <= 700)
+			break ;
+		if (i > 100)
+		{
+			i = 19;
+			break ;
+		}
+		i++;
+		b->count = 0;
+		free_stack(&c);
+	}
+	free_stack(&c);
+	return (i);
 }

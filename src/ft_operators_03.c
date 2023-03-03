@@ -6,7 +6,7 @@
 /*   By: mrezaei <mrezaei@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 11:41:07 by mrezaei           #+#    #+#             */
-/*   Updated: 2023/02/25 18:46:17 by mrezaei          ###   ########.fr       */
+/*   Updated: 2023/03/03 12:58:27 by mrezaei          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	rrr(t_stack *a, t_stack *b, int display)
 {
 	rra(a, 0);
 	rrb(b, 0);
+	b->count--;
 	if (display)
 		write(1, "rrr\n", 4);
 }
